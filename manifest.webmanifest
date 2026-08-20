@@ -1,0 +1,19 @@
+{
+  "name": "Lexicon Terms — IEC 62305-3",
+  "short_name": "Terms",
+  "description": "Russian–English terminology drill for translators. Lightning protection, IEC 62305-3. Works offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#edefea",
+  "theme_color": "#edefea",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

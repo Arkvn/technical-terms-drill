@@ -1,0 +1,1485 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-font="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lexicon Terms &middot; IEC 62305-3</title>
+<meta name="description" content="Russian-English terminology drill for translators. IEC 62305-3, lightning protection. Works offline.">
+<meta name="theme-color" content="#edefea">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Terms">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+/* ==================================================================
+   Lexicon Terms — an engineering drawing sheet you can drill on.
+   Palette: drafting ink on cool paper, blueprint blue for structure,
+   brass for the lightning current, vermilion for hazard.
+   ================================================================== */
+
+:root {
+  --paper:   #edefea;
+  --sheet:   #f7f8f5;
+  --ink:     #17242b;
+  --ink-2:   #5c6b72;
+  --ink-3:   #8a979c;
+  --line:    #c3ccc9;
+  --line-2:  #dde3df;
+  --blue:    #2e5b7a;
+  --brass:   #a8741c;
+  --red:     #a63a32;
+  --green:   #3f6b4e;
+  --shadow:  0 1px 0 rgba(23,36,43,.06), 0 12px 28px -20px rgba(23,36,43,.5);
+
+  --serif: "PT Serif", Georgia, "Times New Roman", serif;
+  --sans:  "PT Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono:  "PT Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --scale: 1;
+  --pad: 18px;
+  --radius: 3px;
+}
+
+html[data-theme="dark"] {
+  --paper:  #10171b;
+  --sheet:  #182126;
+  --ink:    #dee6e4;
+  --ink-2:  #93a5a8;
+  --ink-3:  #6d7f83;
+  --line:   #2f3d43;
+  --line-2: #232f34;
+  --blue:   #7fb3d0;
+  --brass:  #dfae52;
+  --red:    #dc7a70;
+  --green:  #7db28f;
+  --shadow: 0 1px 0 rgba(0,0,0,.3), 0 14px 30px -22px #000;
+}
+
+html[data-font="system"] {
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: calc(16px * var(--scale));
+  line-height: 1.5;
+  overscroll-behavior-y: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* the sheet's faint drafting grid ------------------------------- */
+body[data-texture="grid"]::before,
+body[data-texture="graph"]::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  opacity: .55;
+}
+body[data-texture="grid"]::before {
+  background-image:
+    linear-gradient(var(--line-2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-2) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px;
+}
+body[data-texture="graph"]::before {
+  background-image:
+    linear-gradient(var(--line-2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-2) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px;
+}
+
+#app { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; min-height: 100%;
+       display: flex; flex-direction: column; }
+
+/* ---------------------------------------------------------------- title block */
+.titleblock {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px;
+  padding: max(10px, env(safe-area-inset-top)) var(--pad) 8px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  position: sticky; top: 0; z-index: 20;
+}
+.tb-code { font-family: var(--mono); font-size: .68em; letter-spacing: .08em;
+           text-transform: uppercase; color: var(--ink-2); }
+.tb-mid  { font-family: var(--mono); font-size: .68em; letter-spacing: .06em;
+           text-align: center; color: var(--ink-3); text-transform: uppercase; }
+.tb-right{ font-family: var(--mono); font-size: .8em; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.iconbtn {
+  appearance: none; border: 1px solid var(--line); background: var(--sheet); color: var(--ink);
+  border-radius: var(--radius); padding: 5px 9px; font-family: var(--mono); font-size: .72em;
+  cursor: pointer; letter-spacing: .04em;
+}
+.iconbtn:active { transform: translateY(1px); }
+.iconbtn:focus-visible, button:focus-visible, input:focus-visible, .card:focus-visible {
+  outline: 2px solid var(--brass); outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- dimension progress */
+.dimline { display: flex; align-items: center; gap: 3px; padding: 8px var(--pad) 0; }
+.tick { flex: 1; height: 10px; border-left: 1px solid var(--line); position: relative; }
+.tick:last-child { border-right: 1px solid var(--line); }
+.tick::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+               background: var(--line); transition: background .2s; }
+.tick[data-s="right"]::after { background: var(--green); }
+.tick[data-s="wrong"]::after { background: var(--red); }
+.tick[data-s="now"]::after   { background: var(--brass); height: 3px; }
+
+/* ---------------------------------------------------------------- screens */
+.screen { flex: 1; padding: 0 var(--pad) calc(28px + env(safe-area-inset-bottom)); }
+.screen[hidden] { display: none; }
+
+.eyebrow { font-family: var(--mono); font-size: .68em; letter-spacing: .12em;
+           text-transform: uppercase; color: var(--ink-3); margin: 20px 0 6px; }
+
+h1 { font-family: var(--serif); font-weight: 700; font-size: 1.7em; line-height: 1.15;
+     margin: 0 0 6px; letter-spacing: -.01em; }
+h2 { font-family: var(--serif); font-weight: 700; font-size: 1.15em; margin: 0 0 4px; }
+p  { margin: 0 0 12px; color: var(--ink-2); }
+
+.lede { font-family: var(--serif); font-size: 1.02em; color: var(--ink-2); margin-bottom: 18px; }
+
+/* hero: the sheet's masthead ------------------------------------- */
+.masthead { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--line);
+            padding: 14px 0 16px; margin-top: 12px; }
+.masthead .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.masthead .stat { font-family: var(--mono); font-size: .72em; color: var(--ink-2); }
+
+/* ---------------------------------------------------------------- card list */
+.cardlist { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 8px; }
+.card {
+  display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center;
+  background: var(--sheet); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 12px 14px; cursor: pointer; text-align: left; width: 100%;
+  font: inherit; color: inherit; box-shadow: var(--shadow);
+}
+.card:active { transform: translateY(1px); }
+.card .num { font-family: var(--mono); font-size: 1.1em; color: var(--brass); }
+.card .name { font-family: var(--serif); font-weight: 700; font-size: 1.02em; line-height: 1.2; }
+.card .sub  { font-family: var(--mono); font-size: .66em; color: var(--ink-3); letter-spacing: .04em;
+              text-transform: uppercase; margin-top: 3px; }
+.card .meter { width: 40px; height: 40px; }
+
+/* ---------------------------------------------------------------- buttons */
+.actions { display: flex; gap: 10px; margin: 14px 0 4px; flex-wrap: wrap; }
+.btn {
+  appearance: none; font: inherit; font-family: var(--sans); cursor: pointer;
+  border: 1px solid var(--ink); background: var(--ink); color: var(--paper);
+  border-radius: var(--radius); padding: 12px 18px; letter-spacing: .01em; flex: 1 1 auto;
+  min-height: 46px;
+}
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.brass { background: var(--brass); border-color: var(--brass); color: #fff; }
+html[data-theme="dark"] .btn.brass { color: #1a1206; }
+.btn.right { background: var(--green); border-color: var(--green); color: #fff; }
+.btn.wrong { background: transparent; border-color: var(--red); color: var(--red); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.small { padding: 8px 12px; min-height: 0; font-size: .86em; flex: 0 0 auto; }
+
+/* ---------------------------------------------------------------- term face */
+.face {
+  background: var(--sheet); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px 18px; margin-top: 14px;
+  position: relative; overflow: hidden;
+}
+.face::before {                      /* the current rail — signature element */
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, transparent, var(--brass) 12%, var(--brass) 88%, transparent);
+  opacity: .25;
+}
+.face.live::before { opacity: 1; animation: strike .5s ease-out; }
+@keyframes strike {
+  from { background-position: 0 -240px; opacity: .2; }
+  to   { background-position: 0 0; opacity: 1; }
+}
+
+.dir { font-family: var(--mono); font-size: .66em; letter-spacing: .12em; text-transform: uppercase;
+       color: var(--ink-3); display: flex; justify-content: space-between; }
+.prompt { font-family: var(--serif); font-size: 1.5em; line-height: 1.22; margin: 10px 0 0;
+          hyphens: auto; }
+.prompt.ru { }
+.answer { font-family: var(--serif); font-size: 1.32em; line-height: 1.25; color: var(--blue);
+          margin: 12px 0 0; }
+.rule { border: 0; border-top: 1px solid var(--line); margin: 14px 0; }
+.rule.dash { border-top-style: dashed; }
+
+.defn { font-size: .84em; color: var(--ink-2); margin-top: 10px; }
+.defn b { font-family: var(--mono); font-weight: 400; font-size: .8em; letter-spacing: .1em;
+          text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: 2px; }
+
+.hint { font-family: var(--mono); font-size: .82em; color: var(--brass); margin-top: 10px;
+        letter-spacing: .18em; }
+
+/* ---------------------------------------------------------------- figure */
+figure.fig { margin: 14px 0 0; border: 1px solid var(--line-2); border-radius: var(--radius);
+             background: var(--paper); padding: 6px; }
+figure.fig svg { display: block; width: 100%; height: auto; }
+figcaption { font-family: var(--mono); font-size: .62em; letter-spacing: .08em; text-transform: uppercase;
+             color: var(--ink-3); padding: 4px 4px 2px; border-top: 1px solid var(--line-2); margin-top: 4px; }
+
+svg.dwg .b { fill: none; stroke: var(--blue); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+svg.dwg .f { fill: var(--blue); opacity: .07; stroke: none; }
+svg.dwg .c { fill: none; stroke: var(--brass); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+svg.dwg .x { fill: none; stroke: var(--red); stroke-width: 1.5; stroke-linecap: round; }
+svg.dwg .d { fill: none; stroke: var(--ink-3); stroke-width: .7; stroke-linecap: round; }
+svg.dwg .n { fill: none; stroke: var(--ink-3); stroke-width: .8; stroke-dasharray: 4 3; }
+svg.dwg .h { fill: none; stroke: var(--line); stroke-width: .8; }
+svg.dwg .t { fill: var(--ink-2); font-family: var(--mono); font-size: 7px; letter-spacing: .04em; }
+svg.dwg .x.t { fill: var(--red); stroke: none; }
+svg.dwg circle.c, svg.dwg rect.c, svg.dwg ellipse.c { fill: none; }
+svg.dwg .cf { fill: var(--brass); stroke: none; opacity: .45; }
+svg.dwg .bolt { stroke-width: 2.1; }
+
+/* ---------------------------------------------------------------- typing */
+.typebox { display: flex; gap: 8px; margin-top: 14px; }
+.typebox input {
+  flex: 1; font: inherit; font-family: var(--serif); font-size: 1.05em;
+  padding: 11px 12px; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink); min-width: 0;
+}
+.verdict { font-family: var(--mono); font-size: .74em; letter-spacing: .08em; text-transform: uppercase;
+           margin-top: 10px; }
+button.verdict { appearance: none; display: block; width: 100%; text-align: left; cursor: pointer;
+                 background: transparent; border: 0; border-top: 1px solid var(--line-2);
+                 padding: 10px 0 0; margin-top: 14px; font-size: .74em; }
+button.verdict:active { opacity: .7; }
+.verdict .flip { display: block; margin-top: 4px; color: var(--ink-3); letter-spacing: .06em; }
+.verdict.ok { color: var(--green); }
+.verdict.near { color: var(--brass); }
+.verdict.no { color: var(--red); }
+
+/* ---------------------------------------------------------------- learn nav */
+.learnnav { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.dots { flex: 1; display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
+.dot { width: 7px; height: 7px; border: 1px solid var(--line); border-radius: 50%; }
+.dot.on { background: var(--brass); border-color: var(--brass); }
+.dot.past { background: var(--line); }
+
+/* ---------------------------------------------------------------- lists, settings */
+.rowlist { display: flex; flex-direction: column; border-top: 1px solid var(--line-2); margin-top: 8px; }
+.rowitem { display: flex; justify-content: space-between; align-items: center; gap: 12px;
+           padding: 11px 2px; border-bottom: 1px solid var(--line-2); }
+.rowitem .l { font-family: var(--serif); }
+.rowitem .r { font-family: var(--mono); font-size: .76em; color: var(--ink-2); text-align: right; }
+.rowitem.tap { cursor: pointer; }
+
+.optline { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+            margin: 2px 0 6px; }
+.optline .k { font-family: var(--mono); font-size: .68em; letter-spacing: .1em;
+              text-transform: uppercase; color: var(--ink-3); }
+
+.seg { display: flex; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.seg button { appearance: none; font: inherit; font-family: var(--mono); font-size: .74em;
+              background: transparent; color: var(--ink-2); border: 0; padding: 7px 10px; cursor: pointer;
+              border-left: 1px solid var(--line); }
+.seg button:first-child { border-left: 0; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+.search { width: 100%; font: inherit; font-family: var(--sans); padding: 11px 12px; margin-top: 12px;
+          border: 1px solid var(--line); border-radius: var(--radius); background: var(--sheet); color: var(--ink); }
+
+.glossitem { padding: 10px 2px; border-bottom: 1px solid var(--line-2); cursor: pointer; }
+.glossitem .en { font-family: var(--serif); }
+.glossitem .ru { font-family: var(--serif); color: var(--blue); font-size: .94em; }
+.glossitem .meta { font-family: var(--mono); font-size: .64em; color: var(--ink-3); letter-spacing: .06em; }
+
+.weakmark { color: var(--red); font-family: var(--mono); font-size: .7em; }
+
+/* ---------------------------------------------------------------- footer bar */
+.bar { position: sticky; bottom: 0; background: linear-gradient(transparent, var(--paper) 28%);
+       padding: 14px 0 calc(10px + env(safe-area-inset-bottom)); }
+
+.note { font-family: var(--mono); font-size: .68em; color: var(--ink-3); letter-spacing: .04em; margin-top: 10px; }
+
+.big { font-family: var(--mono); font-size: 2.1em; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.delta.up { color: var(--green); } .delta.down { color: var(--red); }
+
+.spark { display: flex; align-items: flex-end; gap: 3px; height: 34px; margin-top: 6px; }
+.spark i { flex: 1; background: var(--blue); opacity: .5; border-radius: 1px 1px 0 0; min-height: 2px; }
+.spark i.best { background: var(--brass); opacity: 1; }
+
+.toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
+         background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: .76em;
+         padding: 9px 14px; border-radius: var(--radius); z-index: 60; box-shadow: var(--shadow); }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+</style>
+</head>
+<body data-texture="grid">
+<div id="app"></div>
+
+<script>
+/* version ------------------------------------------------------- */
+var APPVER = '1.2';
+
+/* diagrams ------------------------------------------------------ */
+/* ------------------------------------------------------------------
+   Diagrams. Each entry is the inside of an <svg viewBox="0 0 200 120">.
+   Classes:  b structure · f faint fill · c current path · d dimension
+             n dashed · x hazard · h hatching · t label
+------------------------------------------------------------------- */
+const GND = '<line class="b" x1="2" y1="100" x2="198" y2="100"/><path class="h" d="' +
+  Array.from({ length: 20 }, (_, i) => 'M' + (8 + i * 10) + ' 100l-5 6').join('') + '"/>';
+
+const bolt = (x, y0, y1) => {
+  const h = (y1 - y0) / 3;
+  return '<path class="c bolt" d="M' + x + ' ' + y0 + 'l-5 ' + h + ' 6 ' + h + '-1 ' + h + '"/>';
+};
+
+const person = (x, y) =>            // y = ground level, figure ~26 high
+  '<circle class="b" cx="' + x + '" cy="' + (y - 24) + '" r="4"/>' +
+  '<path class="b" d="M' + x + ' ' + (y - 20) + 'v11"/>';
+
+const DIAGRAMS = {
+
+  lps: '<rect class="f" x="58" y="54" width="84" height="46"/><rect class="b" x="58" y="54" width="84" height="46"/>' +
+    '<path class="c" d="M100 54v-16"/>' + bolt(100, 8, 36) +
+    '<path class="c" d="M100 54h42v52"/><path class="c" d="M124 106h34"/>' + GND +
+    '<text class="t" x="104" y="46">1</text><text class="t" x="146" y="80">2</text><text class="t" x="162" y="110">3</text>' +
+    '<text class="t" x="6" y="16">1 air-termination</text><text class="t" x="6" y="26">2 down-conductor</text>' +
+    '<text class="t" x="6" y="36">3 earth-termination</text>',
+
+  'lps-isolated': '<rect class="f" x="66" y="60" width="68" height="40"/><rect class="b" x="66" y="60" width="68" height="40"/>' +
+    '<path class="b" d="M30 100V34M170 100V34"/><path class="c" d="M30 34q70 14 140 0"/>' +
+    bolt(100, 8, 40) + '<path class="c" d="M34 100v6h14M166 100v6h-14"/>' + GND +
+    '<path class="n" d="M66 52h68"/><text class="t" x="70" y="48">no contact</text>',
+
+  'lps-attached': '<rect class="f" x="58" y="54" width="84" height="46"/><rect class="b" x="58" y="54" width="84" height="46"/>' +
+    '<path class="c" d="M78 54v-12M122 54v-12"/><path class="c" d="M78 54h44"/>' +
+    '<path class="c" d="M58 54v46M142 54v46"/><circle class="c" cx="58" cy="76" r="2.4"/><circle class="c" cx="142" cy="76" r="2.4"/>' +
+    bolt(78, 12, 40) + '<path class="c" d="M48 100v6h16M152 100v6h-16"/>' + GND +
+    '<text class="t" x="20" y="76">on the</text><text class="t" x="20" y="86">structure</text>',
+
+  'internal-lps': '<rect class="b" x="30" y="26" width="140" height="74"/>' +
+    '<rect class="b" x="46" y="44" width="26" height="18"/><rect class="b" x="88" y="44" width="26" height="18"/>' +
+    '<rect class="b" x="130" y="44" width="26" height="18"/><path class="c" d="M40 80h120"/>' +
+    '<path class="c" d="M59 62v18M101 62v18M143 62v18"/><path class="c" d="M100 80v20"/>' + GND +
+    '<text class="t" x="40" y="94">bonding bar</text><text class="t" x="52" y="40">internal systems</text>',
+
+  'air-term': '<path class="b" d="M14 74h172"/><path class="c" d="M38 74V44"/>' + bolt(38, 18, 42) +
+    '<path class="b" d="M82 74V52M126 74V52"/><path class="c" d="M82 52q22 8 44 0"/>' +
+    '<path class="c" d="M150 60h34M150 68h34M158 56v16M170 56v16M182 56v16"/>' +
+    '<text class="t" x="28" y="88">rod</text><text class="t" x="92" y="88">wire</text><text class="t" x="156" y="88">mesh</text>',
+
+  rod: '<rect class="f" x="52" y="70" width="96" height="30"/><rect class="b" x="52" y="70" width="96" height="30"/>' +
+    '<path class="c" d="M100 70V34"/><circle class="c" cx="100" cy="34" r="2"/>' + bolt(100, 6, 32) +
+    '<path class="n" d="M100 36 58 92M100 36l42 56"/>' + GND +
+    '<text class="t" x="106" y="52">h</text><text class="t" x="62" y="66">protected</text>',
+
+  catenary: '<rect class="f" x="60" y="76" width="80" height="24"/><rect class="b" x="60" y="76" width="80" height="24"/>' +
+    '<path class="b" d="M36 100V40M164 100V40"/><path class="c" d="M36 40q64 22 128 0"/>' +
+    bolt(100, 8, 46) + '<path class="n" d="M36 40 60 76M164 40l-24 36"/>' + GND +
+    '<text class="t" x="86" y="66">catenary wire</text>',
+
+  mesh: '<rect class="f" x="40" y="24" width="120" height="76"/><rect class="b" x="40" y="24" width="120" height="76"/>' +
+    '<path class="c" d="M70 24v76M100 24v76M130 24v76M40 48h120M40 72h120"/>' +
+    '<path class="d" d="M70 14h30M70 11v6M100 11v6"/><text class="t" x="78" y="9">W</text>' +
+    '<text class="t" x="40" y="112">roof plan · mesh size W</text>',
+
+  'down-conductor': '<rect class="f" x="56" y="40" width="88" height="60"/><rect class="b" x="56" y="40" width="88" height="60"/>' +
+    '<path class="c" d="M56 40v60M144 40v60M56 40h88"/><path class="c" d="M56 100v6h-14M144 100v6h14"/>' +
+    '<path class="c" d="M52 62l4 6 4-6M140 62l4 6 4-6"/>' + GND +
+    '<text class="t" x="70" y="72">structure</text><text class="t" x="8" y="114">to earth</text>',
+
+  'natural-component': '<rect class="b" x="56" y="34" width="88" height="66"/>' +
+    '<path class="c" d="M64 34v66M80 34v66M96 34v66M112 34v66M128 34v66"/>' +
+    '<path class="b" d="M56 52h88M56 70h88M56 88h88"/>' +
+    '<circle class="c" cx="80" cy="52" r="2"/><circle class="c" cx="112" cy="70" r="2"/><circle class="c" cx="96" cy="88" r="2"/>' +
+    bolt(100, 6, 30) + GND + '<text class="t" x="44" y="116">steelwork as conductor</text>',
+
+  'ring-conductor': '<rect class="f" x="50" y="26" width="100" height="74"/><rect class="b" x="50" y="26" width="100" height="74"/>' +
+    '<path class="c" d="M50 26v74M83 26v74M117 26v74M150 26v74"/>' +
+    '<path class="c" d="M50 52h100M50 78h100"/>' +
+    '<text class="t" x="152" y="56">ring</text><text class="t" x="152" y="82">ring</text>' + GND,
+
+  'earth-term': '<path class="b" d="M60 100v-14"/>' + GND +
+    '<path class="c" d="M60 100v10h-26M60 110h26M60 110v8"/>' +
+    '<path class="c n" d="M34 110 14 118M86 110l20 8M60 118l0 0"/>' +
+    '<path class="d" d="M110 108q26 4 44 14M110 112q22 10 32 24"/>' +
+    '<text class="t" x="126" y="118">dispersion</text><text class="t" x="40" y="94">current in</text>',
+
+  'earth-electrode': GND + '<path class="c" d="M70 88v26"/><path class="c" d="M66 114h8l-4 5z"/>' +
+    '<path class="d" d="M92 100v14M88 100h8M88 114h8"/><text class="t" x="98" y="110">l</text>' +
+    '<text class="t" x="132" y="112">soil</text><text class="t" x="46" y="86">conductor</text>',
+
+  'ring-earth': '<rect class="f" x="66" y="34" width="68" height="52"/><rect class="b" x="66" y="34" width="68" height="52"/>' +
+    '<rect class="c" x="52" y="22" width="96" height="76" rx="4"/>' +
+    '<circle class="c" cx="52" cy="22" r="2.4"/><circle class="c" cx="148" cy="22" r="2.4"/>' +
+    '<circle class="c" cx="52" cy="98" r="2.4"/><circle class="c" cx="148" cy="98" r="2.4"/>' +
+    '<text class="t" x="80" y="64">structure</text><text class="t" x="52" y="114">closed loop below ground · plan</text>',
+
+  'foundation-earth': '<rect class="b" x="46" y="70" width="108" height="8"/>' + GND +
+    '<rect class="f" x="52" y="100" width="96" height="18"/><rect class="b" x="52" y="100" width="96" height="18"/>' +
+    '<path class="h" d="M58 118l6-18M72 118l6-18M86 118l6-18M100 118l6-18M114 118l6-18M128 118l6-18"/>' +
+    '<path class="c" d="M60 110h80"/><circle class="c" cx="60" cy="110" r="2.4"/><circle class="c" cx="140" cy="110" r="2.4"/>' +
+    '<path class="c" d="M100 100V78"/><text class="t" x="46" y="66">structure</text>' +
+    '<text class="t" x="60" y="96">concrete foundation</text>',
+
+  'earth-voltage': GND + '<path class="c" d="M60 100v18"/>' +
+    '<path class="d" d="M60 40q30 46 118 50"/><path class="d" d="M60 40v-6"/>' +
+    '<path class="d" d="M172 88v12M46 40v60"/><text class="t" x="66" y="36">U</text>' +
+    '<text class="t" x="146" y="80">remote earth</text><text class="t" x="14" y="70">potential</text>',
+
+  connector: '<rect class="c" x="20" y="52" width="90" height="7" rx="3"/>' +
+    '<rect class="c" x="90" y="62" width="90" height="7" rx="3"/>' +
+    '<rect class="b" x="86" y="46" width="30" height="30" rx="3"/>' +
+    '<circle class="b" cx="94" cy="53" r="2.4"/><circle class="b" cx="108" cy="69" r="2.4"/>' +
+    '<text class="t" x="82" y="94">clamped joint</text>',
+
+  bracket: '<rect class="f" x="16" y="10" width="26" height="100"/><rect class="b" x="16" y="10" width="26" height="100"/>' +
+    '<path class="h" d="M20 20l-6 8M20 40l-6 8M20 60l-6 8M20 80l-6 8M20 100l-6 8"/>' +
+    '<path class="c" d="M74 8v104"/>' +
+    '<path class="b" d="M42 34h26M42 86h26"/><circle class="b" cx="74" cy="34" r="6"/><circle class="b" cx="74" cy="86" r="6"/>' +
+    '<text class="t" x="92" y="38">fixed to</text><text class="t" x="92" y="48">the wall</text>',
+
+  'metal-installations': '<rect class="b" x="34" y="16" width="132" height="84"/>' +
+    '<path class="b" d="M56 100V30q0-6 6-6h14"/><path class="b" d="M100 100V24"/>' +
+    '<path class="b" d="M124 92h14v-10h14v-10h14"/><rect class="b" x="140" y="24" width="20" height="26"/>' +
+    '<text class="t" x="42" y="64">pipes</text><text class="t" x="104" y="64">lift rail</text>' +
+    '<text class="t" x="118" y="112">stairs</text><text class="t" x="136" y="20">duct</text>' + GND,
+
+  bonding: '<rect class="b" x="40" y="20" width="130" height="80"/><path class="c" d="M62 46v40"/>' +
+    '<path class="b" d="M4 60h58M4 74h58M4 88h58"/>' +
+    '<text class="t" x="6" y="56">power</text><text class="t" x="6" y="96">pipes</text>' +
+    '<circle class="c" cx="62" cy="60" r="2.4"/><circle class="c" cx="62" cy="74" r="2.4"/><circle class="c" cx="62" cy="88" r="2.4"/>' +
+    '<path class="c" d="M62 86v14"/><text class="t" x="72" y="42">one common potential</text>' + GND,
+
+  'bonding-bar': '<rect class="c" x="24" y="58" width="152" height="9" rx="2"/>' +
+    '<path class="b" d="M44 58V26M76 58V26M140 58V26M172 58V26"/>' +
+    '<path class="b" d="M100 58V40"/><path class="b" d="M92 26h16l-8 14z"/><rect class="b" x="92" y="18" width="16" height="8"/>' +
+    '<path class="c" d="M100 67v22"/><path class="c" d="M84 89h32"/>' +
+    '<text class="t" x="88" y="14">SPD</text><text class="t" x="24" y="84">bar</text>',
+
+  'rebar-continuity': '<rect class="f" x="30" y="12" width="140" height="96"/><rect class="b" x="30" y="12" width="140" height="96"/>' +
+    '<path class="c" d="M56 12v96M92 12v96M128 12v96M164 12v96"/>' +
+    '<path class="c" d="M30 40h140M30 68h140M30 96h140"/>' +
+    '<circle class="x" cx="56" cy="40" r="3"/><circle class="x" cx="92" cy="68" r="3"/>' +
+    '<circle class="x" cx="128" cy="40" r="3"/><circle class="x" cx="164" cy="96" r="3"/>' +
+    '<text class="t" x="4" y="30">weld or</text><text class="t" x="4" y="40">clamp</text>',
+
+  'rebar-overlap': '<rect class="c" x="14" y="46" width="112" height="8" rx="4"/>' +
+    '<rect class="c" x="74" y="58" width="112" height="8" rx="4"/>' +
+    '<path class="d" d="M74 34h52M74 30v8M126 30v8"/><text class="t" x="86" y="26">&#8805; 20 d</text>' +
+    '<path class="d" d="M190 58v8M186 58h8M186 66h8"/><text class="t" x="176" y="80">d</text>' +
+    '<path class="b" d="M84 44v24M104 44v24M120 44v24"/><text class="t" x="14" y="88">tied overlap</text>',
+
+  precast: '<rect class="f" x="46" y="18" width="108" height="24"/><rect class="b" x="46" y="18" width="108" height="24"/>' +
+    '<rect class="f" x="46" y="48" width="108" height="24"/><rect class="b" x="46" y="48" width="108" height="24"/>' +
+    '<rect class="f" x="46" y="78" width="108" height="24"/><rect class="b" x="46" y="78" width="108" height="24"/>' +
+    '<path class="c" d="M70 42v6M130 42v6M70 72v6M130 72v6"/>' +
+    '<circle class="c" cx="70" cy="42" r="2.4"/><circle class="c" cx="130" cy="42" r="2.4"/>' +
+    '<circle class="c" cx="70" cy="78" r="2.4"/><circle class="c" cx="130" cy="78" r="2.4"/>' +
+    '<text class="t" x="158" y="48">connection</text><text class="t" x="158" y="58">points</text>',
+
+  sparking: '<path class="c" d="M60 8v104"/><path class="b" d="M124 8v104"/>' +
+    '<path class="x" d="M60 56l14-6-6 10 16-4"/><path class="x" d="M84 56l40 0"/>' +
+    '<text class="t" x="30" y="118">down-conductor</text><text class="t" x="130" y="118">metal part</text>' +
+    '<text class="x t" x="72" y="40">flashover</text>',
+
+  separation: '<path class="c" d="M60 8v104"/><path class="b" d="M124 8v104"/>' +
+    '<path class="d" d="M60 56h64M60 50v12M124 50v12"/><text class="t" x="86" y="46">s</text>' +
+    '<text class="t" x="30" y="118">down-conductor</text><text class="t" x="130" y="118">metal part</text>',
+
+  spd: '<path class="b" d="M10 40h80M10 54h80"/><rect class="b" x="90" y="28" width="34" height="40" rx="3"/>' +
+    '<path class="c" d="M100 38h14l-7 12z"/><path class="c" d="M100 56h14"/>' +
+    '<path class="b" d="M124 40h66M124 54h66"/><path class="c" d="M107 68v26"/><path class="c" d="M92 94h30M98 100h18M104 106h6"/>' +
+    '<text class="t" x="12" y="30">incoming line</text><text class="t" x="150" y="30">protected</text>',
+
+  'spark-gap': '<path class="c" d="M20 60h50"/><path class="c" d="M180 60h-50"/>' +
+    '<path class="b" d="M70 44v32M130 44v32"/>' +
+    '<path class="x" d="M70 60l16-6-6 8 20-6-6 8 16-4"/>' +
+    '<path class="d" d="M70 90h60M70 84v12M130 84v12"/><text class="t" x="88" y="106">gap</text>' +
+    '<text class="t" x="16" y="40">section A</text><text class="t" x="140" y="40">section B</text>',
+
+  'test-joint': '<path class="c" d="M100 8v34"/><path class="c" d="M100 76v36"/>' +
+    '<rect class="b" x="82" y="42" width="36" height="34" rx="3"/>' +
+    '<circle class="b" cx="92" cy="52" r="3"/><circle class="b" cx="108" cy="66" r="3"/>' +
+    '<path class="n" d="M118 59h30"/><circle class="b" cx="160" cy="59" r="12"/>' +
+    '<text class="t" x="154" y="63">&#937;</text><text class="t" x="26" y="34">disconnectable</text>' +
+    '<text class="t" x="26" y="44">for testing</text>',
+
+  'lps-class': '<path class="b" d="M24 100h164M24 100V16"/>' +
+    '<rect class="c" x="40" y="34" width="22" height="66"/><rect class="c" x="76" y="46" width="22" height="54"/>' +
+    '<rect class="c" x="112" y="58" width="22" height="42"/><rect class="c" x="148" y="70" width="22" height="30"/>' +
+    '<text class="t" x="46" y="112">I</text><text class="t" x="80" y="112">II</text>' +
+    '<text class="t" x="114" y="112">III</text><text class="t" x="150" y="112">IV</text>' +
+    '<text class="t" x="28" y="26">level of protection</text>',
+};
+
+Object.assign(DIAGRAMS, {
+
+  waveform: '<path class="b" d="M20 100h166M20 100V14"/>' +
+    '<path class="c" d="M20 100 C34 100 38 22 52 22 C74 22 92 74 186 92"/>' +
+    '<path class="d" d="M20 22h32"/><text class="t" x="6" y="24">I</text>' +
+    '<text class="t" x="56" y="40">10/350 &#181;s</text><text class="t" x="164" y="114">t</text>',
+
+  'rolling-sphere': '<rect class="f" x="46" y="62" width="60" height="38"/><rect class="b" x="46" y="62" width="60" height="38"/>' +
+    '<rect class="f" x="106" y="44" width="46" height="56"/><rect class="b" x="106" y="44" width="46" height="56"/>' +
+    '<circle class="c" cx="112" cy="24" r="20"/><path class="d" d="M112 24l14 14"/><text class="t" x="116" y="22">R</text>' +
+    '<circle class="x" cx="106" cy="44" r="3"/><circle class="x" cx="86" cy="62" r="3"/>' + GND +
+    '<text class="t" x="6" y="112">touch points are exposed</text>',
+
+  'protection-angle': '<rect class="f" x="40" y="80" width="120" height="20"/><rect class="b" x="40" y="80" width="120" height="20"/>' +
+    '<path class="c" d="M100 80V18"/><path class="n" d="M100 20 46 92M100 20l54 72"/>' +
+    '<path class="f" d="M100 20 46 92h108z" opacity=".35"/>' +
+    '<path class="d" d="M100 44a24 24 0 0 0-14 8"/><text class="t" x="78" y="42">&#945;</text>' +
+    '<path class="d" d="M170 20v60M166 20h8M166 80h8"/><text class="t" x="176" y="54">h</text>' + GND +
+    '<text class="t" x="56" y="74">protected volume</text>',
+
+  'dc-spacing': '<rect class="f" x="20" y="30" width="160" height="70"/><rect class="b" x="20" y="30" width="160" height="70"/>' +
+    '<path class="c" d="M20 30h160"/><path class="c" d="M20 30v70M60 30v70M100 30v70M140 30v70M180 30v70"/>' +
+    '<path class="d" d="M60 18h40M60 14v8M100 14v8"/><text class="t" x="72" y="12">d</text>' +
+    '<text class="t" x="30" y="114">spaced round the perimeter</text>',
+
+  'cross-section': '<circle class="cf" cx="40" cy="52" r="20"/><circle class="b" cx="40" cy="52" r="20"/>' +
+    '<circle class="b" cx="100" cy="52" r="20"/>' +
+    '<circle class="cf" cx="100" cy="52" r="6.5"/><circle class="cf" cx="100" cy="39" r="6.5"/><circle class="cf" cx="100" cy="65" r="6.5"/>' +
+    '<circle class="cf" cx="89" cy="46" r="6.5"/><circle class="cf" cx="89" cy="58" r="6.5"/>' +
+    '<circle class="cf" cx="111" cy="46" r="6.5"/><circle class="cf" cx="111" cy="58" r="6.5"/>' +
+    '<circle class="b" cx="160" cy="52" r="20"/><circle class="c" cx="160" cy="52" r="11"/>' +
+    '<path class="h" d="M146 44l8-4M144 52l12-6M146 60l16-8M152 66l18-9M162 68l16-8M172 66l8-4"/>' +
+    '<text class="t" x="26" y="90">solid</text><text class="t" x="82" y="90">stranded</text><text class="t" x="140" y="90">insulated</text>',
+
+  puncture: '<rect class="f" x="20" y="58" width="160" height="10"/><rect class="b" x="20" y="58" width="160" height="10"/>' +
+    '<path class="b" d="M92 58h16v10h-16z" fill="none" stroke-dasharray="2 2"/>' +
+    bolt(100, 8, 54) + '<path class="x" d="M92 58l16 10M108 58l-16 10"/>' +
+    '<path class="d" d="M190 58v10M186 58h8M186 68h8"/><text class="t" x="176" y="84">t</text>' +
+    '<text class="t" x="20" y="96">thin sheet: melting or puncture</text>',
+
+  'explosive-structure': '<rect class="f" x="30" y="52" width="80" height="48"/><rect class="b" x="30" y="52" width="80" height="48"/>' +
+    '<path class="b" d="M124 100V70a20 20 0 0 1 40 0v30z"/><path class="b" d="M124 70h40"/>' +
+    '<path class="x" d="M144 22l-16 24h32z"/><text class="x t" x="140" y="44">!</text>' +
+    '<text class="t" x="42" y="80">store</text><text class="t" x="126" y="114">tank</text>' + GND,
+
+  'pipe-explosive': '<path class="b" d="M14 46h172M14 74h172"/><path class="f" d="M14 46h172v28H14z"/>' +
+    '<path class="c" d="M40 60h96"/><path class="c" d="M128 55l10 5-10 5"/>' +
+    '<path class="x" d="M156 40c-6-8 2-12 0-18 8 6 12 12 8 18"/>' +
+    '<text class="t" x="20" y="34">combustible or explosive</text>',
+
+  'flange-gasket': '<rect class="b" x="20" y="46" width="66" height="28"/><rect class="b" x="114" y="46" width="66" height="28"/>' +
+    '<rect class="b" x="86" y="30" width="12" height="60"/><rect class="b" x="102" y="30" width="12" height="60"/>' +
+    '<rect class="x" x="98" y="30" width="4" height="60"/>' +
+    '<path class="b" d="M84 44h32M84 76h32"/>' +
+    '<path class="c" d="M60 46V22q20-8 40-8 20 0 40 8v24"/>' +
+    '<text class="t" x="74" y="106">gasket breaks continuity</text><text class="t" x="126" y="18">bond across</text>',
+
+  'type-a': '<rect class="f" x="66" y="36" width="68" height="48"/><rect class="b" x="66" y="36" width="68" height="48"/>' +
+    '<path class="c" d="M66 36 34 18M134 36l32-18M66 84 34 102M134 84l32 18"/>' +
+    '<circle class="c" cx="34" cy="18" r="2.4"/><circle class="c" cx="166" cy="18" r="2.4"/>' +
+    '<circle class="c" cx="34" cy="102" r="2.4"/><circle class="c" cx="166" cy="102" r="2.4"/>' +
+    '<text class="t" x="82" y="64">structure</text><text class="t" x="40" y="116">separate electrodes, no loop</text>',
+
+  'type-b': '<rect class="f" x="66" y="36" width="68" height="48"/><rect class="b" x="66" y="36" width="68" height="48"/>' +
+    '<rect class="c" x="48" y="20" width="104" height="80" rx="6"/>' +
+    '<path class="c" d="M66 36 48 20M134 36l18-16M66 84 48 100M134 84l18 16"/>' +
+    '<text class="t" x="82" y="64">structure</text><text class="t" x="52" y="116">ring electrode, closed loop</text>',
+
+  'earth-compound': GND + '<path class="c" d="M100 92v24"/>' +
+    '<ellipse class="n" cx="100" cy="106" rx="34" ry="12"/>' +
+    '<path class="h" d="M76 104h4M86 102h4M114 102h4M124 106h4M82 112h4M112 112h4M96 114h4"/>' +
+    '<text class="t" x="138" y="108">compound</text><text class="t" x="70" y="88">electrode</text>',
+
+  'inspection-housing': GND + '<rect class="b" x="72" y="88" width="56" height="30"/>' +
+    '<path class="b" d="M68 88h64"/><path class="c" d="M100 66v22"/>' +
+    '<rect class="b" x="88" y="98" width="24" height="10" rx="2"/>' +
+    '<path class="c" d="M100 108v10"/><text class="t" x="136" y="96">removable</text>' +
+    '<text class="t" x="136" y="106">cover</text><text class="t" x="24" y="80">joint inside</text>',
+
+  'impulse-voltage': '<path class="b" d="M20 100h166M20 100V12"/>' +
+    '<path class="c" d="M20 100 C40 100 42 40 56 40 C80 40 96 82 186 94"/>' +
+    '<path class="n" d="M20 26h166"/><text class="t" x="106" y="22">withstand level</text>' +
+    '<path class="d" d="M56 40v-14"/><text class="t" x="6" y="44">U</text><text class="t" x="164" y="114">t</text>',
+
+  'tn-system': '<circle class="b" cx="34" cy="34" r="7"/><circle class="b" cx="24" cy="50" r="7"/><circle class="b" cx="44" cy="50" r="7"/>' +
+    '<path class="b" d="M62 30h124M62 42h124M62 54h124"/><path class="c" d="M62 72h60"/>' +
+    '<path class="c" d="M122 72h64M122 72l32 18"/>' +
+    '<text class="t" x="188" y="33">L1</text><text class="t" x="188" y="45">L2</text><text class="t" x="188" y="57">L3</text>' +
+    '<text class="t" x="72" y="68">PEN</text><text class="t" x="160" y="68">N</text><text class="t" x="156" y="102">PE</text>' +
+    '<path class="b" d="M34 41v31h28"/>',
+
+  'touch-voltage': '<rect class="f" x="20" y="10" width="34" height="90"/><rect class="b" x="20" y="10" width="34" height="90"/>' +
+    '<path class="c" d="M54 10v90"/>' + person(96, 100) +
+    '<path class="b" d="M96 84 54 74"/><path class="b" d="M96 91l-8 9M96 91l8 9"/>' +
+    '<path class="d" d="M124 74v26M120 74h8M120 100h8"/><text class="t" x="130" y="90">U t</text>' + GND +
+    '<text class="t" x="18" y="112">hand on the conductor</text>',
+
+  'step-voltage': GND + '<path class="c" d="M40 100v18"/>' +
+    '<path class="d" d="M40 46q44 46 150 52"/>' + person(112, 100) +
+    '<path class="b" d="M112 89l-14 11M112 89l14 11"/>' +
+    '<path class="d" d="M98 108h28M98 104v8M126 104v8"/><text class="t" x="132" y="116">1 m</text>' +
+    '<text class="t" x="60" y="60">potential on the ground</text><text class="t" x="146" y="94">U s</text>',
+
+  'zones-gas': '<ellipse class="n" cx="100" cy="58" rx="88" ry="42"/>' +
+    '<ellipse class="n" cx="100" cy="58" rx="60" ry="31"/><ellipse class="x" cx="100" cy="58" rx="33" ry="21"/>' +
+    '<path class="b" d="M87 70V48a13 13 0 0 1 26 0v22z"/><path class="b" d="M87 48h26"/>' +
+    '<text class="t" x="70" y="61">0</text><text class="t" x="44" y="61">1</text><text class="t" x="18" y="61">2</text>' +
+    '<text class="t" x="58" y="114">gas, vapour or mist</text>',
+
+  'zones-dust': '<ellipse class="n" cx="100" cy="58" rx="88" ry="42"/>' +
+    '<ellipse class="n" cx="100" cy="58" rx="60" ry="31"/><ellipse class="x" cx="100" cy="58" rx="33" ry="21"/>' +
+    '<path class="b" d="M88 70V44h24v26z"/><path class="b" d="M88 44l12-9 12 9"/>' +
+    '<text class="t" x="68" y="61">20</text><text class="t" x="42" y="61">21</text><text class="t" x="14" y="61">22</text>' +
+    '<text class="t" x="48" y="114">cloud of combustible dust</text>',
+
+  'induced-current': '<path class="c" d="M24 8v104"/><path class="c" d="M20 46l4 8 4-8"/>' +
+    '<path class="d" d="M44 34a24 24 0 0 1 0 52M60 26a40 40 0 0 1 0 68"/>' +
+    '<rect class="b" x="96" y="38" width="76" height="44"/>' +
+    '<path class="x" d="M104 46h12l-6 8z"/>' +
+    '<text class="t" x="6" y="116">LPS</text><text class="t" x="98" y="96">loop in the wiring</text>' +
+    '<text class="t" x="40" y="20">magnetic field</text>',
+});
+
+
+/* deck ---------------------------------------------------------- */
+var DECK = [{"id":"c1","n":1,"title":"The system and its parts","titleRu":"Система и её части","items":[{"id":"s3-001","en":"Lightning protection system (LPS)","ru":"Система молниезащиты (СМЗ)","ed":"Complete system used to reduce physical damage due to lightning flashes to a structure.","rd":"Система, позволяющая защитить здание или сооружение от воздействий молнии.","img":"lps"},{"id":"s3-002","en":"External lightning protection system","ru":"Внешняя система молниезащиты","ed":"Part of the LPS consisting of an air-termination system, a down-conductor system and an earth-termination system.","rd":"Комплекс, состоящий из молниеприемников, токоотводов и заземляющего устройства.","img":"lps"},{"id":"s3-003","en":"External LPS isolated from the structure to be protected","ru":"Изолированная внешняя система молниезащиты","ed":"LPS with an air-termination system and down-conductor system positioned in such a way that the path of the lightning current has no contact with the structure to be protected.","rd":"Система молниезащиты без электрического контакта с защищаемым сооружением.","img":"lps-isolated"},{"id":"s3-004","en":"External LPS not isolated from the structure to be protected","ru":"Неизолированная внешняя система молниезащиты","ed":"LPS with an air-termination system and down-conductor system positioned in such a way that the path of the lightning current can be in contact with the structure to be protected.","rd":"Система молниезащиты, при которой ток молнии может протекать по конструкции сооружения.","img":"lps-attached"},{"id":"s3-005","en":"Internal lightning protection system","ru":"Внутренняя система молниезащиты","ed":"Part of LPS for equipotential bonding and/or electrical insulation.","rd":"Часть системы, обеспечивающая уравнивание потенциалов и/или электрическую изоляцию.","img":"internal-lps"},{"id":"s3-006","en":"Air-termination system","ru":"Система молниеприемников","ed":"Part of an external LPS using metallic elements such as rods, mesh conductors or catenary wires intended to intercept lightning flashes.","rd":"Часть внешней системы, предназначенная для перехвата молнии.","img":"air-term"},{"id":"s3-007","en":"Down-conductor system","ru":"Система токоотводов","ed":"Part of an external LPS intended to conduct lightning current between the air-termination system and the earth-termination system.","rd":"Часть системы, предназначенная для отвода тока молнии в землю.","img":"down-conductor"},{"id":"s3-009","en":"Earth-termination system","ru":"Заземляющее устройство","ed":"Part of an external LPS which is intended to conduct and disperse lightning current into the earth.","rd":"Часть системы, предназначенная для рассеивания тока молнии в земле.","img":"earth-term"},{"id":"s3-015","en":"Natural component of LPS","ru":"Естественный компонент системы молниезащиты","ed":"Conductive component installed not specifically for lightning protection which can be used in addition to the LPS or in some cases could provide the function of one or more parts of the LPS.","rd":"Проводящий элемент, используемый как часть системы молниезащиты.","img":"natural-component"},{"id":"s3-016","en":"Connecting component","ru":"Соединительный компонент","ed":"Part of an LPS which is used for the connection of conductors to each other or to metallic installations.","rd":"Элемент для соединения проводников или конструкций.","img":"connector"},{"id":"s3-017","en":"Fixing component","ru":"Фиксирующий компонент","ed":"Part of an LPS which is used to fix the elements of the LPS to the structure to be protected.","rd":"Элемент для крепления компонентов системы молниезащиты.","img":"bracket"},{"id":"s3-031","en":"Class of LPS","ru":"Класс системы молниезащиты","ed":"Number denoting the classification of an LPS according to the lightning protection level for which it is designed.","rd":"Классификация системы по уровню защиты.","img":"lps-class"}]},{"id":"c2","n":2,"title":"Air-termination systems","titleRu":"Молниеприёмники","items":[{"id":"s3-058","en":"Intercept direct lightning flashes","ru":"Перехват прямых ударов молнии","img":"air-term"},{"id":"s3-064","en":"Air terminal","ru":"Молниеприемник","img":"rod"},{"id":"s3-065","en":"Metal air-termination systems","ru":"Металлические молниеприемники","img":"air-term"},{"id":"s3-062","en":"Rods (including free-standing masts)","ru":"Стержневые молниеприемники (включая отдельно стоящие мачты)","img":"rod"},{"id":"s3-102","en":"Vertical air-termination rod","ru":"Стержневой молниеприемник","img":"rod"},{"id":"s3-061","en":"Catenary wires","ru":"Молниезащитные тросы","img":"catenary"},{"id":"s3-103","en":"Wire air-termination system","ru":"Тросовый молниеприемник","ed":"Virtual vertical rods having vertexes on the wire.","rd":"Виртуальные вертикальные стержни, имеющие вершины на тросе.","img":"catenary"},{"id":"s3-063","en":"Meshed conductors","ru":"Молниеприемные сетки","img":"mesh"},{"id":"s3-104","en":"Wires combined in a mesh","ru":"Молниеприемная сетка","img":"mesh"},{"id":"s3-066","en":"Determination of the volume protected","ru":"Определение защищаемого объема","img":"protection-angle"},{"id":"s3-071","en":"Might be punctured by a lightning flash","ru":"Возможен прожиг током молнии","img":"puncture"},{"id":"s3-073","en":"Mounting brackets","ru":"Монтажные кронштейны","img":"bracket"}]},{"id":"c3","n":3,"title":"Design methods and parameters","titleRu":"Методы расчёта и параметры","items":[{"id":"s3-067","en":"The protection angle method","ru":"Метод защитного угла","img":"protection-angle"},{"id":"s3-068","en":"The rolling sphere method","ru":"Метод катящейся сферы","img":"rolling-sphere"},{"id":"s3-069","en":"The mesh method","ru":"Метод сетки","img":"mesh"},{"id":"s3-041","en":"Rolling sphere radius","ru":"Радиус катящейся сферы","img":"rolling-sphere"},{"id":"s3-042","en":"Mesh size","ru":"Размер ячейки","img":"mesh"},{"id":"s3-043","en":"Protection angle","ru":"Защитный угол","img":"protection-angle"},{"id":"s3-037","en":"Lightning protection level","ru":"Уровень защиты от молнии","img":"lps-class"},{"id":"s3-038","en":"Classes of LPS (I to IV)","ru":"Классы молниезащиты","img":"lps-class"},{"id":"s3-039","en":"Data dependent upon the class of LPS","ru":"Данные, зависящие от класса молниезащиты","img":"lps-class"},{"id":"s3-040","en":"Lightning parameters","ru":"Параметры молнии","img":"waveform"},{"id":"s3-044","en":"Typical preferred distances between down-conductors","ru":"Типовые рекомендуемые расстояния между токоотводами","img":"dc-spacing"},{"id":"s3-046","en":"Minimum length of earth electrodes","ru":"Минимальная длина заземлителей","img":"earth-electrode"}]},{"id":"c4","n":4,"title":"Down-conductors and current paths","titleRu":"Токоотводы и пути тока","items":[{"id":"s3-055","en":"Natural down-conductor","ru":"Естественный токоотвод","img":"natural-component"},{"id":"s3-056","en":"External down-conductor system","ru":"Внешний токоотвод","img":"down-conductor"},{"id":"s3-059","en":"Conduct the lightning current from the point of strike to ground","ru":"Отведение тока молнии от точки удара в землю","img":"down-conductor"},{"id":"s3-081","en":"Dispersion of the lightning current","ru":"Стекание тока молнии","img":"earth-term"},{"id":"s3-008","en":"Ring conductor","ru":"Кольцевой проводник","ed":"Conductor forming a loop around the structure and interconnecting the down-conductors for distribution of lightning current among them.","rd":"Проводник, образующий контур вокруг сооружения и соединяющий токоотводы.","img":"ring-conductor"},{"id":"s3-087","en":"Ring conductor external to the structure to be protected","ru":"Кольцевой проводник, расположенный вне защищаемого сооружения","img":"ring-conductor"},{"id":"s3-018","en":"Metal installations","ru":"Металлические конструкции","ed":"Extended metal items in the structure to be protected which may form a path for lightning current, such as pipework, staircases, elevator guide rails, ventilation, heating and air conditioning ducts, interconnected reinforcing steel, structural metal parts.","rd":"Металлические части сооружения, проводящие ток молнии.","img":"metal-installations"},{"id":"s3-019","en":"External conductive parts","ru":"Внешние проводящие части","ed":"Extended metal items entering or leaving the structure to be protected such as pipework, metallic cable elements, metal ducts, etc. which may carry a part of the lightning current.","rd":"Металлические элементы, входящие или выходящие из сооружения.","img":"metal-installations"},{"id":"s3-074","en":"Cross-section of the steel or thermal equivalent conductor","ru":"Площадь поперечного сечения стального или эквивалентного по тепловыделению материала","img":"cross-section"},{"id":"s3-090","en":"Predictable accidental stresses","ru":"Расчетные механические воздействия"},{"id":"s3-060","en":"Thermal and explosive effects","ru":"Термическое или динамическое воздействие","img":"puncture"}]},{"id":"c5","n":5,"title":"Earth-termination: elements","titleRu":"Заземляющее устройство: элементы","items":[{"id":"s3-010","en":"Earth electrode","ru":"Заземлитель","ed":"Part or a group of parts of the earth-termination system which provides direct electrical contact with the earth and disperses lightning current to the earth.","rd":"Элемент заземляющего устройства, находящийся в контакте с землей.","img":"earth-electrode"},{"id":"s3-011","en":"Ring earth electrode","ru":"Кольцевой заземлитель","ed":"Earth electrode forming a closed loop around the structure below or on the surface of the earth.","rd":"Заземлитель в виде замкнутого контура вокруг сооружения.","img":"ring-earth"},{"id":"s3-012","en":"Foundation earth electrode","ru":"Фундаментный заземлитель","ed":"Conductive part buried in the soil under a building foundation or, preferably, embedded in concrete of a building foundation, generally in form of a closed loop.","rd":"Проводящая часть, расположенная в фундаменте здания.","img":"foundation-earth"},{"id":"s3-101","en":"Natural earth electrode","ru":"Естественный заземлитель","ed":"Interconnected reinforcing steel in concrete foundations in accordance with 5.6, or other suitable underground metal structure should preferably be used as an earth electrode.","rd":"Взаимосвязанная стальная арматура в бетонных фундаментах, выполненная в соответствии с 5.6, или другие пригодные для этой цели подземные металлические конструкции.","img":"foundation-earth"},{"id":"s3-082","en":"Single integrated structure earth-termination system","ru":"Единое заземляющее устройство","img":"earth-term"},{"id":"s3-013","en":"Conventional earth impedance","ru":"Сопротивление заземляющего устройства","ed":"Ratio of the peak values of the earth-termination voltage and the earth-termination current which, in general, do not occur simultaneously.","rd":"Отношение напряжения к току в заземляющем устройстве.","img":"earth-voltage"},{"id":"s3-014","en":"Earth-termination voltage","ru":"Напряжение на заземляющем устройстве","ed":"Potential difference between the earth-termination system and the remote earth.","rd":"Напряжение между точкой ввода тока и зоной нулевого потенциала.","img":"earth-voltage"},{"id":"s3-089","en":"Long-term increase in earthing resistance","ru":"Увеличение сопротивления заземления со временем","img":"earth-voltage"},{"id":"s3-088","en":"Inspection housing","ru":"Инспекционный колодец","img":"inspection-housing"},{"id":"s3-030","en":"Test joint","ru":"Испытательный зажим","ed":"Joint designed to facilitate electrical testing and measurement of LPS components.","rd":"Разъемное соединение для измерений.","img":"test-joint"},{"id":"s3-080","en":"Test joint (disconnectable joint)","ru":"Испытательный зажим (разъемное соединение)","img":"test-joint"}]},{"id":"c6","n":6,"title":"Earth arrangements and materials","titleRu":"Конфигурации заземления и материалы","items":[{"id":"s3-084","en":"Type A arrangement","ru":"Конфигурация A","img":"type-a"},{"id":"s3-086","en":"Type B arrangement","ru":"Конфигурация B","img":"type-b"},{"id":"s3-083","en":"Not forming a closed loop","ru":"Не образующий замкнутый контур","img":"type-a"},{"id":"s3-085","en":"Earthing enhancing compounds","ru":"Специальные смеси для уменьшения сопротивления грунта","img":"earth-compound"},{"id":"s3-091","en":"Solid copper","ru":"Одножильная медь","img":"cross-section"},{"id":"s3-092","en":"Stranded copper","ru":"Многожильная медь","img":"cross-section"},{"id":"s3-054","en":"Overall electrical resistance","ru":"Общее электрическое сопротивление","img":"earth-voltage"},{"id":"s3-045","en":"Separation distance against dangerous sparking","ru":"Разделительное расстояние для защиты от опасного искрения","img":"separation"},{"id":"s3-028","en":"Separation distance","ru":"Разделительное расстояние","ed":"Distance preventing dangerous sparking.","rd":"Расстояние, предотвращающее искрение.","img":"separation"},{"id":"s3-027","en":"Dangerous sparking","ru":"Опасное искрение","ed":"Electrical discharge due to lightning which causes physical damage in the structure to be protected.","rd":"Разряд, вызывающий повреждения.","img":"sparking"}]},{"id":"c7","n":7,"title":"Bonding and internal systems","titleRu":"Уравнивание потенциалов и внутренние системы","items":[{"id":"s3-023","en":"Lightning equipotential bonding (EB)","ru":"Уравнивание потенциалов","ed":"Bonding to the LPS of separated conductive parts, by direct connections or via surge protective devices, to reduce potential differences caused by lightning current.","rd":"Соединение проводящих частей для уменьшения разности потенциалов.","img":"bonding"},{"id":"s3-024","en":"Bonding bar","ru":"Шина уравнивания потенциалов","ed":"Metal bar on which metal installations, external conductive parts, electric power and telecommunication lines and other cables can be bonded to an LPS.","rd":"Металлическая шина для соединения проводящих частей.","img":"bonding-bar"},{"id":"s3-093","en":"Ring bonding bar","ru":"Кольцевая шина уравнивания потенциалов","img":"bonding-bar"},{"id":"s3-025","en":"Bonding conductor","ru":"Проводник уравнивания потенциалов","ed":"Conductor connecting separated conductive parts to LPS.","rd":"Проводник, соединяющий части с системой молниезащиты.","img":"bonding"},{"id":"s3-020","en":"Electrical system","ru":"Электрическая система","ed":"System incorporating low-voltage power supply components.","rd":"Система электроснабжения низкого напряжения.","img":"internal-lps"},{"id":"s3-021","en":"Electronic system","ru":"Электронная система","ed":"System incorporating sensitive electronic components such as telecommunication equipment, computer, control and instrumentation systems, radio systems, power electronic installations.","rd":"Система, содержащая чувствительные электронные компоненты.","img":"internal-lps"},{"id":"s3-022","en":"Internal systems","ru":"Внутренние системы","ed":"Electrical and electronic systems within a structure.","rd":"Электрические и электронные системы внутри сооружения.","img":"internal-lps"},{"id":"s3-029","en":"Surge protective device (SPD)","ru":"УЗИП","ed":"Device intended to limit transient overvoltages and divert surge currents; contains at least one non-linear component.","rd":"Устройство для ограничения перенапряжений.","img":"spd"},{"id":"s3-035","en":"Isolating spark gap (ISG)","ru":"Разделительный искровой разрядник; РИР","ed":"Component with discharge distance for isolating electrically conductive installation sections. In the event of a lightning strike the sections are temporarily connected conductively as a result of the discharge.","rd":"Устройство с искровым промежутком для электрического разделения проводящих частей установки. Примечание - В случае удара молнии части установки временно соединяются электрически в результате действия разряда.","img":"spark-gap"},{"id":"s3-036","en":"Isolating interfaces","ru":"Разделительные интерфейсы","ed":"Devices which are capable of reducing conducted surges on lines entering the LPZ.","rd":"Устройства, способные уменьшить импульсы напряжения в линиях, пересекающих границы зон защиты от молнии.","img":"spd"},{"id":"s3-112","en":"Induced currents","ru":"Наведенные токи","ed":"Currents in the conductors of the external LPS may induce excessive over-voltages in the conductor loops of the internal installations by the effect of magnetic coupling. Overvoltages may cause failures of internal systems.","rd":"Токи в проводниках внешней СМЗ могут наводить недопустимые перенапряжения в контурах проводников внутренних установок посредством магнитного поля. Перенапряжения могут привести к выходу внутренних систем из строя.","img":"induced-current"}]},{"id":"c8","n":8,"title":"Reinforced concrete and continuity","titleRu":"Железобетон и электрическая непрерывность","items":[{"id":"s3-047","en":"Continuity of steelwork in reinforced concrete structures","ru":"Электрическая непрерывность арматуры железобетонных сооружений","img":"rebar-continuity"},{"id":"s3-048","en":"Electrically continuous","ru":"Электрически непрерывный","img":"rebar-continuity"},{"id":"s3-026","en":"Interconnected reinforcing steel","ru":"Взаимосвязанная стальная арматура","ed":"Steelwork within a concrete structure which is considered electrically continuous.","rd":"Стальная арматура, рассматриваемая как электрически непрерывная.","img":"rebar-continuity"},{"id":"s3-070","en":"Electrically-continuous reinforced concrete","ru":"Металлическая электрически непрерывная арматура бетона","img":"rebar-continuity"},{"id":"s3-049","en":"Interconnections of vertical and horizontal bars","ru":"Точки соединений вертикальных и горизонтальных стержней","img":"rebar-continuity"},{"id":"s3-050","en":"Welded or otherwise securely connected","ru":"Выполнена путем сварки или обеспечено надежное соединение другим способом","img":"rebar-continuity"},{"id":"s3-051","en":"Overlapped a minimum of 20 times their diameters","ru":"Вязкой внахлест с перепуском не менее 20 диаметров","img":"rebar-overlap"},{"id":"s3-078","en":"Interconnection points between the reinforcing elements","ru":"Выводы для соединения арматуры железобетонных элементов между собой","img":"precast"},{"id":"s3-079","en":"Electrical continuity in a vertical direction","ru":"Электрическая непрерывность в вертикальном направлении","img":"rebar-continuity"},{"id":"s3-075","en":"Electrical continuity between the various parts","ru":"Электрическая непрерывность между различными частями металлоконструкций","img":"rebar-continuity"},{"id":"s3-052","en":"Steel-reinforced concrete","ru":"Железобетон","img":"precast"},{"id":"s3-053","en":"Pre-cast, pre-stressed reinforced units","ru":"Сборный или предварительно напряженный железобетон","img":"precast"}]},{"id":"c9","n":9,"title":"Explosive atmospheres","titleRu":"Взрывоопасные среды","items":[{"id":"s3-034","en":"Structures with risk of explosion","ru":"Взрывоопасные сооружения","ed":"Structures containing solid explosives materials or hazardous zones as determined in accordance with IEC 60079-10-1 and IEC 60079-10-2.","rd":"Сооружения, содержащие твердые взрывчатые материалы или взрывоопасные зоны.","img":"explosive-structure"},{"id":"s3-105","en":"Solid explosive material","ru":"Твердое взрывчатое вещество","img":"explosive-structure"},{"id":"s3-106","en":"Zone 0","ru":"Зона класса 0","ed":"Place in which an explosive atmosphere consisting of a mixture of air and flammable substances in the form of gas, vapour or mist is present continuously or for long periods or frequently.","rd":"Область, в которой взрывоопасная среда из смеси воздуха с горючими веществами в форме газа, пара или тумана присутствует постоянно или в течение длительного периода.","img":"zones-gas"},{"id":"s3-107","en":"Zone 1","ru":"Зона класса 1","ed":"Place in which an explosive atmosphere consisting of a mixture of air and flammable substances in the form of gas, vapour or mist is likely to occur in normal operation occasionally.","rd":"Область, в которой существует вероятность присутствия взрывоопасной среды из смеси воздуха с горючими веществами в форме газа, пара или тумана в нормальных условиях эксплуатации.","img":"zones-gas"},{"id":"s3-108","en":"Zone 2","ru":"Зона класса 2","ed":"Place in which an explosive atmosphere consisting of a mixture of air and flammable substances in the form of gas, vapour or mist is not likely to occur in normal operation but, if it does occur, will persist for a short period only.","rd":"Область, в которой присутствие взрывоопасной газовой атмосферы в нормальных условиях эксплуатации маловероятно, возникает редко и сохраняется очень непродолжительное время.","img":"zones-gas"},{"id":"s3-109","en":"Zone 20","ru":"Зона класса 20","ed":"Place in which an explosive atmosphere, in the form of a cloud of combustible dust in air, is present continuously, or for long periods, or frequently.","rd":"Зона, в которой взрывоопасная среда в виде облака горючей пыли в воздухе присутствует постоянно, часто или в течение длительного периода времени.","img":"zones-dust"},{"id":"s3-110","en":"Zone 21","ru":"Зона класса 21","ed":"Place in which an explosive atmosphere in the form of a cloud of combustible dust in air, is likely to occur in normal operation occasionally.","rd":"Зона, в которой время от времени вероятно появление взрывоопасной среды в виде облака горючей пыли в воздухе при нормальном режиме эксплуатации.","img":"zones-dust"},{"id":"s3-111","en":"Zone 22","ru":"Зона класса 22","ed":"Place in which an explosive atmosphere in the form of a cloud of combustible dust in air is not likely to occur in normal operation but, if it does occur, will persist for a short period only.","rd":"Зона, в которой маловероятно появление взрывоопасной среды в виде облака горючей пыли в воздухе при нормальном режиме эксплуатации, но если горючая пыль появляется, то сохраняется в течение короткого периода времени.","img":"zones-dust"},{"id":"s3-076","en":"Piping carrying readily-combustible or explosive mixtures","ru":"Трубопроводы с горючими или взрывоопасными смесями","img":"pipe-explosive"},{"id":"s3-077","en":"Gasket in the flange couplings","ru":"Прокладка во фланцевом соединении","img":"flange-gasket"},{"id":"s3-057","en":"Adjacent pre-cast concrete units","ru":"Соседние железобетонные элементы","img":"precast"}]},{"id":"c10","n":10,"title":"Insulation, voltages and people","titleRu":"Изоляция, напряжения и люди","items":[{"id":"s3-094","en":"Rated impulse sparkover voltage","ru":"Номинальное импульсное пробивное напряжение","img":"impulse-voltage"},{"id":"s3-095","en":"Impulse withstand level of insulation","ru":"Выдерживаемый импульсный уровень изоляции","img":"impulse-voltage"},{"id":"s3-096","en":"TN systems","ru":"Системы заземления типа TN","img":"tn-system"},{"id":"s3-097","en":"PE and PEN conductors","ru":"Проводники PE и PEN","img":"tn-system"},{"id":"s3-098","en":"Touch voltage","ru":"Напряжение прикосновения","img":"touch-voltage"},{"id":"s3-099","en":"Step voltage","ru":"Шаговое напряжение","img":"step-voltage"},{"id":"s3-100","en":"Cross-linked polyethylene","ru":"Сшитый полиэтилен","img":"cross-section"},{"id":"s3-072","en":"Interconnected reinforcing steel","ru":"Взаимосвязанная арматура","img":"rebar-continuity"},{"id":"s3-032","en":"Lightning protection designer","ru":"Проектировщик системы молниезащиты","ed":"Specialist competent and skilled in the design of the LPS.","rd":"Специалист, компетентный и квалифицированный в части проектирования систем молниезащиты."},{"id":"s3-033","en":"Lightning protection installer","ru":"Монтажник системы молниезащиты","ed":"Person competent and skilled in the installation of the LPS.","rd":"Лицо, компетентное и квалифицированное в части монтажа систем молниезащиты."},{"id":"s3-113","en":"IEC (International Electrotechnical Commission)","ru":"МЭК (Международная Электротехническая Коммиссия)"}]}];
+
+/* app ----------------------------------------------------------- */
+/* ==================================================================
+   Lexicon Terms — IEC 62305-3, RU <-> EN
+   No server, no account, no analytics. Everything stays on the device.
+   ================================================================== */
+(function () {
+'use strict';
+
+/* ---------------------------------------------------------------- storage */
+var MEM = {};
+var store = {
+  get: function (k, d) {
+    try { var v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }
+    catch (e) { return k in MEM ? MEM[k] : d; }
+  },
+  set: function (k, v) {
+    try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { MEM[k] = v; }
+  }
+};
+
+var DEFAULTS = {
+  theme: 'auto', scale: 1, font: 'pt', texture: 'grid', fold: 'right',
+  typing: false, defs: true, sound: false
+};
+var S = Object.assign({}, DEFAULTS, store.get('lt.settings', {}));
+var P = store.get('lt.progress', {});      // id -> {s,r,w,k,weak}
+var T = store.get('lt.times', {});         // cardId -> [{ms,at,mode}]
+var L = store.get('lt.learned', {});       // cardId -> iso date
+
+function saveS() { store.set('lt.settings', S); }
+function saveP() { store.set('lt.progress', P); }
+function saveT() { store.set('lt.times', T); }
+function saveL() { store.set('lt.learned', L); }
+
+function rec(id) { return P[id] || (P[id] = { s: 0, r: 0, w: 0, k: 0, weak: 0 }); }
+
+/* ---------------------------------------------------------------- helpers */
+var $ = function (sel, root) { return (root || document).querySelector(sel); };
+var app = $('#app');
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+  });
+}
+function shuffle(a) {
+  a = a.slice();
+  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+function ms2clock(ms) {
+  var s = Math.round(ms / 1000);
+  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+}
+function allItems() {
+  return DECK.reduce(function (a, c) { return a.concat(c.items); }, []);
+}
+function cardOf(id) { return DECK.filter(function (c) { return c.id === id; })[0]; }
+
+function fig(id, caption) {
+  if (!id || !DIAGRAMS[id]) return '';
+  return '<figure class="fig"><svg class="dwg" viewBox="0 0 200 120" role="img" aria-label="' +
+    esc(caption || '') + '">' + DIAGRAMS[id] + '</svg>' +
+    (caption ? '<figcaption>' + esc(caption) + '</figcaption>' : '') + '</figure>';
+}
+
+function ring(pct) {
+  var r = 15, c = 2 * Math.PI * r;
+  return '<svg class="meter" viewBox="0 0 40 40" aria-hidden="true">' +
+    '<circle cx="20" cy="20" r="' + r + '" fill="none" stroke="var(--line)" stroke-width="3"/>' +
+    '<circle cx="20" cy="20" r="' + r + '" fill="none" stroke="var(--brass)" stroke-width="3" ' +
+    'stroke-linecap="round" stroke-dasharray="' + (c * pct).toFixed(1) + ' ' + c.toFixed(1) + '" ' +
+    'transform="rotate(-90 20 20)"/></svg>';
+}
+
+function toast(msg) {
+  var t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function () { t.remove(); }, 2200);
+}
+
+/* ---------------------------------------------------------------- appearance */
+function applySettings() {
+  var dark = S.theme === 'dark' ||
+    (S.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  document.documentElement.dataset.font = S.font;
+  document.documentElement.style.setProperty('--scale', S.scale);
+  document.body.dataset.texture = S.texture;
+  var meta = $('meta[name="theme-color"]');
+  if (meta) meta.content = dark ? '#10171b' : '#edefea';
+  if (S.font === 'pt' && !$('#gfonts')) {
+    var l = document.createElement('link');
+    l.id = 'gfonts'; l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=PT+Mono&family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap';
+    document.head.appendChild(l);
+  }
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applySettings);
+
+/* ---------------------------------------------------------------- answer checking */
+function norm(s) {
+  return String(s).toLowerCase().replace(/\u0451/g, '\u0435')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ').replace(/^the /, '').trim();
+}
+function variants(s) {
+  var out = [], push = function (x) { x = norm(x); if (x && out.indexOf(x) < 0) out.push(x); };
+  push(s);
+  push(s.replace(/\([^)]*\)/g, ' '));
+  s.split(/[;\/]/).forEach(function (p) { push(p); push(p.replace(/\([^)]*\)/g, ' ')); });
+  var m = s.match(/\(([^)]+)\)/); if (m) push(m[1]);
+  return out;
+}
+function lev(a, b) {
+  var m = a.length, n = b.length, prev = [], cur = [], i, j;
+  for (j = 0; j <= n; j++) prev[j] = j;
+  for (i = 1; i <= m; i++) {
+    cur[0] = i;
+    for (j = 1; j <= n; j++) {
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    }
+    prev = cur.slice();
+  }
+  return prev[n];
+}
+function judge(input, target) {
+  var got = norm(input); if (!got) return 'no';
+  var vs = variants(target);
+  if (vs.indexOf(got) >= 0) return 'ok';
+  var best = Infinity;
+  vs.forEach(function (v) { best = Math.min(best, lev(got, v) / Math.max(v.length, 1)); });
+  return best <= 0.18 ? 'near' : 'no';
+}
+
+/* ---------------------------------------------------------------- navigation */
+var stack = [{ name: 'home' }];
+function go(view) { stack.push(view); history.pushState({ d: stack.length }, ''); render(); }
+function back() { if (stack.length > 1) { stack.pop(); render(); } }
+window.addEventListener('popstate', function () { if (stack.length > 1) { stack.pop(); render(); } });
+
+/* ---------------------------------------------------------------- title block */
+function titleblock(mid, right, backable) {
+  return '<header class="titleblock">' +
+    (backable
+      ? '<button class="iconbtn" data-act="back" aria-label="Back">&#8592;</button>'
+      : '<span class="tb-code">IEC 62305-3</span>') +
+    '<span class="tb-mid">' + esc(mid || '') + '</span>' +
+    '<span class="tb-right">' + (right || '') + '</span></header>';
+}
+
+/* ================================================================= HOME */
+function viewHome() {
+  var items = allItems();
+  var known = items.filter(function (i) { return rec(i.id).r > 0; }).length;
+  var weak = items.filter(function (i) { return rec(i.id).weak; }).length;
+  var learned = DECK.filter(function (c) { return L[c.id]; }).length;
+
+  var cards = DECK.map(function (c) {
+    var done = c.items.filter(function (i) { return rec(i.id).r > 0; }).length;
+    var best = (T[c.id] || []).reduce(function (a, x) { return Math.min(a, x.ms); }, Infinity);
+    var sub = [
+      c.items.length + ' terms',
+      L[c.id] ? 'read' : 'unread',
+      best < Infinity ? 'best ' + ms2clock(best) : ''
+    ].filter(Boolean).join(' \u00b7 ');
+    return '<button class="card" data-act="card" data-id="' + c.id + '">' +
+      '<span class="num">' + String(c.n).padStart(2, '0') + '</span>' +
+      '<span><span class="name">' + esc(c.title) + '</span>' +
+      '<span class="sub">' + esc(sub) + '</span></span>' +
+      ring(done / c.items.length) + '</button>';
+  }).join('');
+
+  return titleblock('lightning protection', '\u26a1') +
+    '<main class="screen">' +
+    '<div class="masthead">' +
+      '<div class="eyebrow" style="margin-top:0">Terminology drill \u00b7 RU \u2194 EN</div>' +
+      '<h1>Lexicon Terms</h1>' +
+      '<div class="row"><span class="stat">' + items.length + ' terms \u00b7 ' + DECK.length + ' cards</span>' +
+      '<span class="stat">' + known + ' met \u00b7 ' + learned + ' read \u00b7 ' +
+      (weak ? '<b style="color:var(--red)">' + weak + ' weak</b>' : '0 weak') + '</span></div>' +
+    '</div>' +
+    '<div class="cardlist">' + cards + '</div>' +
+    '<div class="actions">' +
+      '<button class="btn ghost small" data-act="weak">Weak items' + (weak ? ' (' + weak + ')' : '') + '</button>' +
+      '<button class="btn ghost small" data-act="recall-all">Definitions</button>' +
+      '<button class="btn ghost small" data-act="gloss">Glossary</button>' +
+      '<button class="btn ghost small" data-act="stats">Progress</button>' +
+      '<button class="btn ghost small" data-act="settings">Settings</button>' +
+    '</div>' +
+    '<p class="note">Read a card first, then drill it. Say the equivalent out loud before you reveal \u2014 ' +
+    'silent recognition always feels easier than it is.</p>' +
+    '</main>';
+}
+
+/* ================================================================= CARD */
+function viewCard(id) {
+  var c = cardOf(id);
+  var defs = c.items.filter(function (i) { return i.ed || i.rd; }).length;
+  var hist = (T[c.id] || []);
+  var best = hist.reduce(function (a, x) { return Math.min(a, x.ms); }, Infinity);
+  var last = hist.length ? hist[hist.length - 1] : null;
+
+  var list = c.items.map(function (i) {
+    var r = rec(i.id);
+    return '<div class="rowitem"><span class="l">' + esc(i.en) +
+      '<br><span style="color:var(--blue)">' + esc(i.ru) + '</span></span>' +
+      '<span class="r">' + (r.weak ? '<span class="weakmark">weak</span><br>' : '') +
+      (r.s ? r.r + '/' + r.s : '\u2013') + '</span></div>';
+  }).join('');
+
+  return titleblock('card ' + String(c.n).padStart(2, '0'), '', true) +
+    '<main class="screen">' +
+    '<div class="eyebrow">Card ' + String(c.n).padStart(2, '0') + ' \u00b7 ' + c.items.length + ' terms</div>' +
+    '<h1>' + esc(c.title) + '</h1>' +
+    '<p class="lede">' + esc(c.titleRu) + '</p>' +
+    '<div class="actions">' +
+      '<button class="btn brass" data-act="learn" data-id="' + c.id + '">Learn</button>' +
+      '<button class="btn" data-act="drill" data-id="' + c.id + '">Drill</button>' +
+    '</div>' +
+    '<div class="optline"><span class="k">Answer by</span>' +
+      seg('set-typing', [[0, 'buttons'], [1, 'typing']], S.typing ? 1 : 0) + '</div>' +
+    '<p class="note">' + (S.typing
+      ? 'You type the term and the app grades it. Reveal is still there if you would rather skip typing.'
+      : 'You say the term, reveal it, and grade yourself.') + '</p>' +
+    (defs >= 4 ? '<div class="actions"><button class="btn ghost" data-act="recall" data-id="' + c.id +
+      '">Recall from definition (' + defs + ')</button></div>' : '') +
+    (best < Infinity
+      ? '<p class="note">Best ' + ms2clock(best) + ' \u00b7 last ' + ms2clock(last.ms) +
+        ' \u00b7 ' + hist.length + ' run' + (hist.length > 1 ? 's' : '') + '</p>'
+      : '<p class="note">Not drilled yet.</p>') +
+    '<div class="eyebrow">Contents</div><div class="rowlist">' + list + '</div>' +
+    '</main>';
+}
+
+/* ================================================================= LEARN */
+var learn = null;
+function startLearn(cardId) {
+  var c = cardOf(cardId);
+  learn = { card: c, i: 0 };
+  go({ name: 'learn' });
+}
+function viewLearn() {
+  var c = learn.card, it = c.items[learn.i], n = c.items.length;
+  var dots = c.items.map(function (_, k) {
+    return '<span class="dot ' + (k === learn.i ? 'on' : (k < learn.i ? 'past' : '')) + '"></span>';
+  }).join('');
+  var r = rec(it.id);
+
+  return titleblock('read \u00b7 card ' + String(c.n).padStart(2, '0'),
+    '<span class="tb-right">' + (learn.i + 1) + '/' + n + '</span>', true) +
+    '<main class="screen">' +
+    '<div class="face live">' +
+      '<div class="dir"><span>English</span><span>' + esc(c.title) + '</span></div>' +
+      '<p class="prompt">' + esc(it.en) + '</p>' +
+      (it.ed ? '<div class="defn">' + esc(it.ed) + '</div>' : '') +
+      '<hr class="rule dash">' +
+      '<div class="dir"><span>\u0420\u0443\u0441\u0441\u043a\u0438\u0439</span><span></span></div>' +
+      '<p class="answer">' + esc(it.ru) + '</p>' +
+      (it.rd ? '<div class="defn">' + esc(it.rd) + '</div>' : '') +
+      fig(it.img, it.en) +
+    '</div>' +
+    '<div class="learnnav">' +
+      '<button class="iconbtn" data-act="lprev"' + (learn.i === 0 ? ' disabled' : '') + '>&#8592;</button>' +
+      '<span class="dots">' + dots + '</span>' +
+      '<button class="iconbtn" data-act="lnext">' + (learn.i === n - 1 ? 'done' : '&#8594;') + '</button>' +
+    '</div>' +
+    '<div class="actions">' +
+      '<button class="btn ghost small" data-act="mark" data-id="' + it.id + '">' +
+      (r.weak ? '\u2713 marked for extra practice' : 'Mark for extra practice') + '</button>' +
+    '</div>' +
+    (learn.i === n - 1
+      ? '<div class="bar"><button class="btn brass" data-act="drill" data-id="' + c.id + '">Drill this card</button></div>'
+      : '<p class="note">Swipe or use the arrows. Nothing is timed here.</p>') +
+    '</main>';
+}
+
+/* ================================================================= DRILL */
+var D = null, tick = null;
+
+function startDrill(items, label, cardId, mode) {
+  D = {
+    items: items, label: label, cardId: cardId, mode: mode || 'drill',
+    pass: 1, passes: mode === 'recall' ? 1 : 2,
+    order: shuffle(items.map(function (_, i) { return i; })),
+    pos: 0, again: [], revealed: false, pending: null, t0: Date.now(),
+    right: 0, wrong: 0, marks: [], typed: '', verdict: ''
+  };
+  go({ name: 'drill' });
+  startClock();
+}
+function startClock() {
+  stopClock();
+  tick = setInterval(function () {
+    var el = $('#clock'); if (el && D) el.textContent = ms2clock(Date.now() - D.t0);
+  }, 1000);
+}
+function stopClock() { if (tick) { clearInterval(tick); tick = null; } }
+
+function current() { return D.items[D.order[D.pos]]; }
+
+function drillFace() {
+  var it = current();
+  var ruFirst = D.pass === 1;                       // pass 1: RU -> EN
+  var q, a, qlabel, alabel;
+  if (D.mode === 'recall') {
+    q = it.ed || it.rd; a = it.en + '  \u2014  ' + it.ru;
+    qlabel = it.ed ? 'Definition' : '\u041e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0438\u0435';
+    alabel = 'Term';
+  } else if (ruFirst) {
+    q = it.ru; a = it.en; qlabel = '\u0420\u0443\u0441\u0441\u043a\u0438\u0439'; alabel = 'English';
+  } else {
+    q = it.en; a = it.ru; qlabel = 'English'; alabel = '\u0420\u0443\u0441\u0441\u043a\u0438\u0439';
+  }
+  return { it: it, q: q, a: a, qlabel: qlabel, alabel: alabel };
+}
+
+function answerTarget() {
+  var f = drillFace();
+  return D.mode === 'recall' ? f.it.en : f.a;
+}
+
+function viewDrill() {
+  var f = drillFace(), it = f.it, r = rec(it.id);
+  var total = D.order.length;
+  var ticks = D.order.map(function (_, k) {
+    var s = '';
+    if (k < D.pos) s = D.marks[k] === 0 ? 'wrong' : 'right';
+    if (k === D.pos) s = 'now';
+    return '<span class="tick"' + (s ? ' data-s="' + s + '"' : '') + '></span>';
+  }).join('');
+
+  var head = titleblock(
+    (D.mode === 'recall' ? 'recall' : 'pass ' + D.pass + ' of ' + D.passes) + ' \u00b7 ' + esc(D.label),
+    '<span id="clock">' + ms2clock(Date.now() - D.t0) + '</span>', true);
+
+  var body = '<div class="face' + (D.revealed ? ' live' : '') + '">' +
+    '<div class="dir"><span>' + f.qlabel + ' \u2192 ' + f.alabel + '</span><span>' +
+      (D.pos + 1) + '/' + total + (D.again.length ? ' +' + D.again.length : '') + '</span></div>' +
+    '<p class="prompt">' + esc(f.q) + '</p>';
+
+  if (D.revealed) {
+    body += '<hr class="rule">' +
+      '<p class="answer">' + esc(f.a) + '</p>' +
+      (S.defs && D.mode !== 'recall' && (it.ed || it.rd)
+        ? '<div class="defn"><b>definition</b>' + esc(it.ed || it.rd) + '</div>' : '') +
+      fig(it.img, it.en);
+    if (D.verdict) {
+      var vt = D.verdict === 'ok' ? 'exact'
+        : D.verdict === 'near' ? 'close \u2014 check the spelling' : 'not this one';
+      body += '<button class="verdict ' + (D.pending ? 'ok' : 'no') + '" data-act="flip">' + vt +
+        (D.typed ? ' \u00b7 you wrote: ' + esc(D.typed) : '') +
+        '<span class="flip">counts as ' + (D.pending ? 'got it' : 'missed') +
+        ' \u00b7 tap to change</span></button>';
+    }
+  } else if (D.hintOn) {
+    var hint = (D.mode === 'recall' ? it.en : f.a).split(/\s+/).map(function (w) {
+      return w[0] + '\u2009' + '\u00b7'.repeat(Math.max(1, w.length - 1));
+    }).join('  ');
+    body += '<div class="hint">' + esc(hint) + '</div>' +
+      (it.ed && D.mode !== 'recall' ? '<div class="defn">' + esc(it.ed) + '</div>' : '');
+  }
+  body += '</div>';
+
+  if (S.typing && !D.revealed) {
+    body += '<div class="typebox">' +
+      '<input id="typed" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" ' +
+      'placeholder="' + (f.alabel === 'English' ? 'type the English term' : '\u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u0440\u043c\u0438\u043d') + '">' +
+      '<button class="btn small brass" data-act="check">Check</button></div>';
+  }
+
+  var grade, twoUp = true;
+  if (!D.revealed) {
+    grade = '<button class="btn ghost" data-act="hint">Hint</button>' +
+            '<button class="btn" data-act="reveal">Reveal</button>';
+  } else if (D.pending === null) {
+    grade = '<button class="btn wrong" data-act="grade" data-v="0">Missed</button>' +
+            '<button class="btn right" data-act="grade" data-v="1">Got it</button>';
+  } else {
+    grade = '<button class="btn ' + (D.pending ? 'right' : 'wrong') + '" data-act="next">Next</button>';
+    twoUp = false;
+  }
+  if (S.fold === 'left' && D.revealed && twoUp) {
+    grade = grade.split('</button>').filter(Boolean).reverse().join('</button>') + '</button>';
+  }
+
+  return head +
+    '<div class="dimline" aria-hidden="true">' + ticks + '</div>' +
+    '<main class="screen">' + body +
+    '<div class="bar"><div class="actions">' + grade + '</div>' +
+    (r.weak ? '<p class="note">Marked weak \u00b7 seen ' + r.s + ' times</p>' : '') +
+    '</div></main>';
+}
+
+function reveal() {
+  D.revealed = true; render();
+}
+function checkTyped() {
+  var el = $('#typed'); if (!el) return;
+  D.typed = el.value;
+  D.verdict = judge(el.value, answerTarget());
+  D.pending = D.verdict === 'ok' ? 1 : 0;    // only an exact answer counts; tap the verdict to overrule
+  D.revealed = true;
+  render();
+}
+function grade(good) {
+  var it = current(), r = rec(it.id);
+  r.s++;
+  if (good) { r.r++; r.k++; if (r.k >= 2) r.weak = 0; D.right++; }
+  else { r.w++; r.k = 0; r.weak = 1; D.wrong++; if (D.again.indexOf(D.order[D.pos]) < 0) D.again.push(D.order[D.pos]); }
+  D.marks[D.pos] = good ? 1 : 0;
+  saveP();
+  next();
+}
+function next() {
+  D.revealed = false; D.hintOn = false; D.typed = ''; D.verdict = ''; D.pending = null;
+  D.pos++;
+  if (D.pos >= D.order.length) {
+    if (D.again.length) {                        // missed items come round again
+      D.order = D.order.concat(shuffle(D.again));
+      D.again = [];
+      render();
+      return;
+    }
+    if (D.pass < D.passes) {
+      D.pass++; D.order = shuffle(D.items.map(function (_, i) { return i; }));
+      D.pos = 0; D.marks = [];
+      render();
+      return;
+    }
+    return finish();
+  }
+  render();
+}
+function finish() {
+  stopClock();
+  var ms = Date.now() - D.t0;
+  if (D.cardId) {
+    var h = T[D.cardId] || (T[D.cardId] = []);
+    h.push({ ms: ms, at: new Date().toISOString(), mode: D.mode });
+    if (h.length > 24) h.shift();
+    saveT();
+  }
+  D.finalMs = ms;
+  if (stack[stack.length - 1].name === 'drill') stack.pop();   // never step back into a finished drill
+  stack.push({ name: 'done' });
+  history.pushState({ d: stack.length }, '');
+  render();
+}
+
+function viewDone() {
+  var ms = D.finalMs, hist = D.cardId ? (T[D.cardId] || []) : [];
+  var others = hist.slice(0, -1).map(function (x) { return x.ms; });
+  var best = others.length ? Math.min.apply(null, others) : null;
+  var prev = others.length ? others[others.length - 1] : null;
+  var delta = prev ? prev - ms : 0;
+  var weak = D.items.filter(function (i) { return rec(i.id).weak; });
+  var maxms = hist.reduce(function (a, x) { return Math.max(a, x.ms); }, 1);
+  var bars = hist.map(function (x) {
+    return '<i class="' + (x.ms === Math.min.apply(null, hist.map(function (y) { return y.ms; })) ? 'best' : '') +
+      '" style="height:' + Math.max(6, Math.round(x.ms / maxms * 34)) + 'px" title="' + ms2clock(x.ms) + '"></i>';
+  }).join('');
+
+  return titleblock('finished \u00b7 ' + esc(D.label), '', true) +
+    '<main class="screen">' +
+    '<div class="eyebrow">Total time</div>' +
+    '<div class="big">' + ms2clock(ms) + '</div>' +
+    (prev
+      ? '<p class="note ' + (delta > 0 ? 'delta up' : 'delta down') + '">' +
+        (delta > 0 ? '\u2212' + ms2clock(Math.abs(delta)) + ' faster than last time' :
+          '+' + ms2clock(Math.abs(delta)) + ' slower than last time') +
+        (best ? ' \u00b7 best ' + ms2clock(best) : '') + '</p>'
+      : '<p class="note">First run on this card \u2014 the number to beat.</p>') +
+    (hist.length > 1 ? '<div class="spark">' + bars + '</div>' : '') +
+    '<div class="eyebrow">This session</div>' +
+    '<div class="rowlist">' +
+      '<div class="rowitem"><span class="l">Correct</span><span class="r">' + D.right + '</span></div>' +
+      '<div class="rowitem"><span class="l">Missed</span><span class="r">' + D.wrong + '</span></div>' +
+      '<div class="rowitem"><span class="l">Terms</span><span class="r">' + D.items.length +
+        ' \u00d7 ' + D.passes + ' pass' + (D.passes > 1 ? 'es' : '') + '</span></div>' +
+    '</div>' +
+    (weak.length
+      ? '<div class="eyebrow">Still weak</div><div class="rowlist">' + weak.map(function (i) {
+          return '<div class="rowitem"><span class="l">' + esc(i.en) +
+            '<br><span style="color:var(--blue)">' + esc(i.ru) + '</span></span></div>';
+        }).join('') + '</div>'
+      : '<p class="note">Nothing left weak on this card.</p>') +
+    '<div class="bar"><div class="actions">' +
+      '<button class="btn ghost" data-act="home">Home</button>' +
+      (D.cardId ? '<button class="btn" data-act="drill" data-id="' + D.cardId + '">Again</button>' : '') +
+    '</div></div></main>';
+}
+
+/* ================================================================= WEAK */
+function viewWeak() {
+  var weak = allItems().filter(function (i) { return rec(i.id).weak; });
+  var list = weak.map(function (i) {
+    var r = rec(i.id);
+    return '<div class="rowitem"><span class="l">' + esc(i.en) +
+      '<br><span style="color:var(--blue)">' + esc(i.ru) + '</span></span>' +
+      '<span class="r">' + r.r + '/' + r.s + '<br><button class="iconbtn" data-act="unmark" data-id="' +
+      i.id + '">clear</button></span></div>';
+  }).join('');
+
+  return titleblock('weak items', '', true) +
+    '<main class="screen">' +
+    '<div class="eyebrow">Collected from every card</div>' +
+    '<h1>Weak items</h1>' +
+    (weak.length
+      ? '<p class="lede">' + weak.length + ' term' + (weak.length > 1 ? 's' : '') +
+        ' you have missed. They clear themselves after two clean answers.</p>' +
+        '<div class="actions"><button class="btn brass" data-act="drillweak">Drill these' +
+        (weak.length > 12 ? ' (first 12)' : '') + '</button></div>' +
+        '<div class="rowlist">' + list + '</div>'
+      : '<p class="lede">Nothing here. Miss a term in a drill and it will appear.</p>') +
+    '</main>';
+}
+
+/* ================================================================= GLOSSARY */
+var gq = '';
+function viewGloss() {
+  var q = norm(gq);
+  var hits = allItems().filter(function (i) {
+    return !q || norm(i.en).indexOf(q) >= 0 || norm(i.ru).indexOf(q) >= 0 ||
+      norm(i.ed || '').indexOf(q) >= 0 || norm(i.rd || '').indexOf(q) >= 0;
+  });
+  var list = hits.map(function (i) {
+    var c = DECK.filter(function (c) { return c.items.indexOf(i) >= 0; })[0];
+    return '<div class="glossitem" data-act="term" data-id="' + i.id + '">' +
+      '<div class="en">' + esc(i.en) + '</div>' +
+      '<div class="ru">' + esc(i.ru) + '</div>' +
+      '<div class="meta">card ' + String(c.n).padStart(2, '0') +
+      (i.img ? ' \u00b7 figure' : '') + (i.ed || i.rd ? ' \u00b7 definition' : '') +
+      (rec(i.id).weak ? ' \u00b7 weak' : '') + '</div></div>';
+  }).join('');
+
+  return titleblock('glossary', hits.length + '/' + allItems().length, true) +
+    '<main class="screen">' +
+    '<div class="eyebrow">Look anything up</div>' +
+    '<h1>Glossary</h1>' +
+    '<input class="search" id="gq" type="search" placeholder="\u0440\u0443\u0441\u0441\u043a\u0438\u0439 or english\u2026" value="' + esc(gq) + '">' +
+    '<div style="margin-top:12px">' + (list || '<p class="note">Nothing matches.</p>') + '</div>' +
+    '</main>';
+}
+
+function viewTerm(id) {
+  var it = allItems().filter(function (i) { return i.id === id; })[0];
+  var c = DECK.filter(function (c) { return c.items.indexOf(it) >= 0; })[0];
+  var r = rec(it.id);
+  return titleblock('term \u00b7 card ' + String(c.n).padStart(2, '0'), '', true) +
+    '<main class="screen">' +
+    '<div class="face">' +
+      '<div class="dir"><span>English</span><span>' + esc(c.title) + '</span></div>' +
+      '<p class="prompt">' + esc(it.en) + '</p>' +
+      (it.ed ? '<div class="defn">' + esc(it.ed) + '</div>' : '') +
+      '<hr class="rule dash">' +
+      '<div class="dir"><span>\u0420\u0443\u0441\u0441\u043a\u0438\u0439</span><span></span></div>' +
+      '<p class="answer">' + esc(it.ru) + '</p>' +
+      (it.rd ? '<div class="defn">' + esc(it.rd) + '</div>' : '') +
+      fig(it.img, it.en) +
+    '</div>' +
+    '<p class="note">Seen ' + r.s + ' \u00b7 right ' + r.r + ' \u00b7 missed ' + r.w + '</p>' +
+    '<div class="actions">' +
+      '<button class="btn ghost small" data-act="mark" data-id="' + it.id + '">' +
+      (r.weak ? '\u2713 marked' : 'Mark for extra practice') + '</button>' +
+      '<button class="btn ghost small" data-act="card" data-id="' + c.id + '">Open card ' +
+      String(c.n).padStart(2, '0') + '</button>' +
+    '</div></main>';
+}
+
+/* ================================================================= STATS */
+function viewStats() {
+  var items = allItems();
+  var seen = items.filter(function (i) { return rec(i.id).s > 0; });
+  var right = seen.reduce(function (a, i) { return a + rec(i.id).r; }, 0);
+  var tot = seen.reduce(function (a, i) { return a + rec(i.id).s; }, 0);
+  var rows = DECK.map(function (c) {
+    var h = T[c.id] || [];
+    var best = h.length ? ms2clock(Math.min.apply(null, h.map(function (x) { return x.ms; }))) : '\u2013';
+    var last = h.length ? ms2clock(h[h.length - 1].ms) : '\u2013';
+    return '<div class="rowitem tap" data-act="card" data-id="' + c.id + '">' +
+      '<span class="l">' + String(c.n).padStart(2, '0') + ' \u00b7 ' + esc(c.title) + '</span>' +
+      '<span class="r">best ' + best + '<br>last ' + last + '</span></div>';
+  }).join('');
+  return titleblock('progress', '', true) +
+    '<main class="screen">' +
+    '<div class="eyebrow">Accuracy so far</div>' +
+    '<div class="big">' + (tot ? Math.round(right / tot * 100) : 0) + '%</div>' +
+    '<p class="note">' + right + ' correct out of ' + tot + ' answers \u00b7 ' +
+      seen.length + ' of ' + items.length + ' terms met</p>' +
+    '<div class="eyebrow">Times by card</div><div class="rowlist">' + rows + '</div>' +
+    '<p class="note">A drill counts both passes. Times are only comparable with your own.</p>' +
+    '</main>';
+}
+
+/* ================================================================= SETTINGS */
+function seg(act, opts, val) {
+  return '<span class="seg">' + opts.map(function (o) {
+    return '<button data-act="' + act + '" data-v="' + o[0] + '" aria-pressed="' +
+      (String(val) === String(o[0])) + '">' + o[1] + '</button>';
+  }).join('') + '</span>';
+}
+function viewSettings() {
+  return titleblock('settings', '', true) +
+    '<main class="screen">' +
+    '<div class="eyebrow">How it looks and behaves</div><h1>Settings</h1>' +
+    '<div class="rowlist">' +
+      '<div class="rowitem"><span class="l">Answering</span>' + seg('set-typing',
+        [[0, 'buttons'], [1, 'typing']], S.typing ? 1 : 0) + '</div>' +
+      '<div class="rowitem"><span class="l">Definitions after reveal</span>' + seg('set-defs',
+        [[1, 'show'], [0, 'hide']], S.defs ? 1 : 0) + '</div>' +
+      '<div class="rowitem"><span class="l">Theme</span>' + seg('set-theme',
+        [['light', 'light'], ['dark', 'dark'], ['auto', 'auto']], S.theme) + '</div>' +
+      '<div class="rowitem"><span class="l">Text size</span>' + seg('set-scale',
+        [[0.9, 'S'], [1, 'M'], [1.15, 'L'], [1.3, 'XL']], S.scale) + '</div>' +
+      '<div class="rowitem"><span class="l">Typeface</span>' + seg('set-font',
+        [['pt', 'PT'], ['system', 'system']], S.font) + '</div>' +
+      '<div class="rowitem"><span class="l">Paper</span>' + seg('set-texture',
+        [['plain', 'plain'], ['grid', 'grid'], ['graph', 'graph']], S.texture) + '</div>' +
+      '<div class="rowitem"><span class="l">Buttons on</span>' + seg('set-fold',
+        [['left', 'left'], ['right', 'right']], S.fold) + '</div>' +
+    '</div>' +
+    '<p class="note">With typing mode on, the app grades the term for you: an exact answer counts as ' +
+    '<i>got it</i>, anything else as <i>missed</i>. Case, punctuation and \u0451/\u0435 are still forgiven, ' +
+    'and short forms are accepted. Tap the verdict to overrule it. With typing off you grade yourself, ' +
+    'as before.</p>' +
+    '<div class="eyebrow">Your data</div>' +
+    '<div class="actions">' +
+      '<button class="btn ghost small" data-act="export">Export</button>' +
+      '<button class="btn ghost small" data-act="import">Import</button>' +
+      '<button class="btn ghost small" data-act="update">Check for updates</button>' +
+      '<button class="btn ghost small" data-act="reset">Reset progress</button>' +
+    '</div>' +
+    '<input type="file" id="importfile" accept="application/json" hidden>' +
+    '<p class="note">Timings and weak items live only in this browser. Export now and then \u2014 ' +
+    'the accumulated times are the part you cannot recreate. Version ' + APPVER + '.</p>' +
+    '</main>';
+}
+
+/* ---------------------------------------------------------------- export / import */
+function doExport() {
+  var blob = new Blob([JSON.stringify({
+    app: 'lexicon-terms', v: APPVER, exported: new Date().toISOString(),
+    settings: S, progress: P, times: T, learned: L
+  }, null, 1)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'lexicon-terms-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+}
+function doImport(file) {
+  var fr = new FileReader();
+  fr.onload = function () {
+    try {
+      var d = JSON.parse(fr.result);
+      Object.keys(d.progress || {}).forEach(function (k) {
+        var a = P[k], b = d.progress[k];
+        P[k] = !a ? b : { s: Math.max(a.s, b.s), r: Math.max(a.r, b.r), w: Math.max(a.w, b.w), k: Math.max(a.k, b.k), weak: a.weak || b.weak };
+      });
+      Object.keys(d.times || {}).forEach(function (k) {
+        T[k] = (T[k] || []).concat(d.times[k]).sort(function (x, y) { return x.at < y.at ? -1 : 1; }).slice(-24);
+      });
+      Object.assign(L, d.learned || {});
+      Object.assign(S, d.settings || {});
+      saveP(); saveT(); saveL(); saveS(); applySettings();
+      toast('Imported \u2014 merged with what was here');
+      render();
+    } catch (e) { toast('That file could not be read'); }
+  };
+  fr.readAsText(file);
+}
+
+/* ================================================================= render */
+function render() {
+  var v = stack[stack.length - 1], html;
+  if ((v.name === 'drill' || v.name === 'done') && !D) v = { name: 'home' };
+  if (v.name === 'learn' && !learn) v = { name: 'home' };
+  switch (v.name) {
+    case 'card': html = viewCard(v.id); break;
+    case 'learn': html = viewLearn(); break;
+    case 'drill': html = viewDrill(); break;
+    case 'done': html = viewDone(); break;
+    case 'weak': html = viewWeak(); break;
+    case 'gloss': html = viewGloss(); break;
+    case 'term': html = viewTerm(v.id); break;
+    case 'stats': html = viewStats(); break;
+    case 'settings': html = viewSettings(); break;
+    default: html = viewHome();
+  }
+  app.innerHTML = html;
+  window.scrollTo(0, 0);
+  var t = $('#typed'); if (t) t.focus();
+  var g = $('#gq');
+  if (g) {
+    g.focus();
+    if (gq) g.setSelectionRange(gq.length, gq.length);
+    g.oninput = function () { gq = g.value; render(); };
+  }
+}
+
+/* ---------------------------------------------------------------- events */
+document.addEventListener('click', function (e) {
+  var el = e.target.closest('[data-act]'); if (!el) return;
+  var act = el.dataset.act, id = el.dataset.id, v = el.dataset.v;
+
+  switch (act) {
+    case 'back': back(); break;
+    case 'home': stack = [{ name: 'home' }]; render(); break;
+    case 'card': go({ name: 'card', id: id }); break;
+    case 'gloss': go({ name: 'gloss' }); break;
+    case 'term': go({ name: 'term', id: id }); break;
+    case 'stats': go({ name: 'stats' }); break;
+    case 'settings': go({ name: 'settings' }); break;
+    case 'weak': go({ name: 'weak' }); break;
+
+    case 'learn': startLearn(id); break;
+    case 'lprev': if (learn.i > 0) { learn.i--; render(); } break;
+    case 'lnext':
+      if (learn.i < learn.card.items.length - 1) { learn.i++; render(); }
+      else { L[learn.card.id] = new Date().toISOString(); saveL(); back(); }
+      break;
+    case 'mark': {
+      var r = rec(id); r.weak = r.weak ? 0 : 1; saveP(); render(); break;
+    }
+    case 'unmark': rec(id).weak = 0; saveP(); render(); break;
+
+    case 'drill': {
+      var c = cardOf(id);
+      if (stack[stack.length - 1].name !== 'home') { stack = [{ name: 'home' }, { name: 'card', id: id }]; }
+      startDrill(c.items, c.title, c.id, 'drill');
+      break;
+    }
+    case 'drillweak': {
+      var weak = allItems().filter(function (i) { return rec(i.id).weak; }).slice(0, 12);
+      stack = [{ name: 'home' }];
+      startDrill(weak, 'Weak items', null, 'drill');
+      break;
+    }
+    case 'recall': {
+      var cc = cardOf(id);
+      var withDef = cc.items.filter(function (i) { return i.ed || i.rd; });
+      stack = [{ name: 'home' }, { name: 'card', id: id }];
+      startDrill(withDef, cc.title, null, 'recall');
+      break;
+    }
+    case 'recall-all': {
+      var defs = shuffle(allItems().filter(function (i) { return i.ed || i.rd; })).slice(0, 15);
+      startDrill(defs, 'Definitions', null, 'recall');
+      break;
+    }
+
+    case 'reveal': reveal(); break;
+    case 'check': checkTyped(); break;
+    case 'hint': D.hintOn = true; render(); break;
+    case 'grade': grade(v === '1'); break;
+    case 'next': grade(D.pending === 1); break;
+    case 'flip': D.pending = D.pending ? 0 : 1; render(); break;
+
+    case 'set-theme': S.theme = v; saveS(); applySettings(); render(); break;
+    case 'set-scale': S.scale = parseFloat(v); saveS(); applySettings(); render(); break;
+    case 'set-font': S.font = v; saveS(); applySettings(); render(); break;
+    case 'set-texture': S.texture = v; saveS(); applySettings(); render(); break;
+    case 'set-fold': S.fold = v; saveS(); render(); break;
+    case 'set-typing': S.typing = v === '1'; saveS(); render(); break;
+    case 'set-defs': S.defs = v === '1'; saveS(); render(); break;
+
+    case 'export': doExport(); break;
+    case 'import': $('#importfile').click(); break;
+    case 'update':
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistration().then(function (r) {
+          if (!r) { toast('Not installed as an app yet'); return; }
+          r.update().then(function () { toast('Checked \u2014 reopen to get any new version'); });
+        });
+      } else { toast('Updates need the installed version'); }
+      break;
+    case 'reset':
+      if (confirm('Clear all timings, weak items and progress on this device?')) {
+        P = {}; T = {}; L = {}; saveP(); saveT(); saveL(); toast('Cleared'); render();
+      }
+      break;
+  }
+});
+
+document.addEventListener('change', function (e) {
+  if (e.target.id === 'importfile' && e.target.files[0]) doImport(e.target.files[0]);
+});
+
+document.addEventListener('keydown', function (e) {
+  var v = stack[stack.length - 1].name;
+  if (e.target.tagName === 'INPUT') {
+    if (e.key === 'Enter' && e.target.id === 'typed') { e.preventDefault(); checkTyped(); }
+    return;
+  }
+  if (v === 'drill') {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      if (!D.revealed) reveal(); else grade(D.pending === null ? true : D.pending === 1);
+    }
+    if (e.key === 'ArrowRight' && D.revealed) grade(true);
+    if (e.key === 'ArrowLeft' && D.revealed) grade(false);
+    if (e.key === 'h' && !D.revealed) { D.hintOn = true; render(); }
+  }
+  if (v === 'learn') {
+    if (e.key === 'ArrowRight') { if (learn.i < learn.card.items.length - 1) { learn.i++; render(); } }
+    if (e.key === 'ArrowLeft' && learn.i > 0) { learn.i--; render(); }
+  }
+});
+
+/* swipe through Learn ------------------------------------------------ */
+var sx = 0, sy = 0;
+document.addEventListener('touchstart', function (e) {
+  sx = e.changedTouches[0].clientX; sy = e.changedTouches[0].clientY;
+}, { passive: true });
+document.addEventListener('touchend', function (e) {
+  if (stack[stack.length - 1].name !== 'learn') return;
+  var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+  if (Math.abs(dx) < 56 || Math.abs(dy) > 48) return;
+  if (dx < 0 && learn.i < learn.card.items.length - 1) { learn.i++; render(); }
+  if (dx > 0 && learn.i > 0) { learn.i--; render(); }
+}, { passive: true });
+
+/* ---------------------------------------------------------------- start */
+applySettings();
+render();
+
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+})();
+
+</script>
+</body>
+</html>
